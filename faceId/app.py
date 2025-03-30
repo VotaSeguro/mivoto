@@ -250,101 +250,123 @@ def verificar_clave():
 
 #Ruta para renderizar el formulario
 @app.route('/api/submit-form', methods=['POST'])
-def handle_form_submission():
-   
+def handle_external_submission():
+    """
+    SIMULA recibir el voto DETALLADO para un sistema externo.
+    Lee los datos directamente del payload.
+    """
     data = request.json
-    print(f"Recibida llamada API para registrar voto: {data}") 
+    print("-" * 30)
+    print(f"[API Externa Sim] Recibido Payload Completo: {data}")
+
+    # --- LEER DATOS DIRECTAMENTE ---
+    token = data.get('token')
+    tipo_eleccion = data.get('tipo_eleccion')
+    partido = data.get('partido_votado')
+    candidato = data.get('candidato_votado')
+    # location = data.get('location') # Si decidieras enviarlo
+
+    # --- ACTUALIZAR VALIDACIÓN ---
+    # Verificar que los campos esperados no sean None o vacíos
+    if not all([token, tipo_eleccion, partido, candidato]):
+         print("[API Externa Sim] Error: Faltan datos requeridos (token, tipo, partido o candidato).")
+         # Determinar qué faltó específicamente (opcional para mejor log)
+         missing = [k for k, v in {'token': token, 'tipo': tipo_eleccion, 'partido': partido, 'candidato': candidato}.items() if not v]
+         print(f"[API Externa Sim] Campos faltantes: {missing}")
+         return jsonify({"error": f"Faltan datos requeridos: {', '.join(missing)}"}), 400
+    # --- FIN ACTUALIZACIÓN VALIDACIÓN ---
+
+    print(f"[API Externa Sim] Datos extraídos OK: Token={token}, Eleccion={tipo_eleccion}, Partido={partido}, Candidato={candidato}")
+    print("-" * 30)
+
+    # Simplemente devolvemos éxito
+    return jsonify({"message": "Voto detallado recibido por sistema externo (simulado)."}), 200
+
+
+
+@app.route('/api/confirm-vote', methods=['POST'])
+def handle_internal_confirmation():
+ 
+    data = request.json
+    print("-" * 30)
+    print(f"[API Confirma] Recibido: {data}")
 
     token_recibido = data.get('token')
 
-   
     if not token_recibido:
-        return jsonify({"error": "Faltan datos (token)"}), 400
+        print("[API Confirma] Error: Falta token.")
+        print("-" * 30)
+        return jsonify({"error": "Falta el token para confirmar el voto"}), 400
 
-   
     if token_recibido in TOKENS_PENDIENTES:
-       
         clave_lector_a_actualizar = TOKENS_PENDIENTES[token_recibido]
-        print(f"Intentando actualizar estado para: {clave_lector_a_actualizar}")
+        print(f"[API Confirma] Intentando actualizar para: {clave_lector_a_actualizar}")
 
         conn = None
         votante_correo = None
         votante_nombre = None
         actualizacion_exitosa = False
-        ya_habia_votado = False 
+        ya_habia_votado = False
 
         try:
             conn = sqlite3.connect(DB_NAME)
             cursor = conn.cursor()
-
-            print(f"Ejecutando SELECT para {clave_lector_a_actualizar}")
             cursor.execute("SELECT nombre_completo, correo, ya_voto FROM votantes WHERE clave_lector = ?", (clave_lector_a_actualizar,))
-            votante_info = cursor.fetchone() 
+            votante_info = cursor.fetchone()
 
             if not votante_info:
-                print(f"Error CRÍTICO: Votante {clave_lector_a_actualizar} no encontrado al intentar actualizar.")
-                raise ValueError("Votante no encontrado para actualizar") 
+                print(f"[API Confirma] Error CRÍTICO: Votante {clave_lector_a_actualizar} no encontrado.")
+                raise ValueError("Votante no encontrado")
 
             votante_nombre = votante_info[0]
             votante_correo = votante_info[1]
-            ya_habia_votado = bool(votante_info[2]) 
+            ya_habia_votado = bool(votante_info[2])
 
             if ya_habia_votado:
-                 print(f"Advertencia: Votante {clave_lector_a_actualizar} ya había votado (chequeo en API).")
-                
-                 actualizacion_exitosa = True
+                 print(f"[API Confirma] Advertencia: Votante {clave_lector_a_actualizar} ya había votado.")
+                 actualizacion_exitosa = True # Considerar éxito para limpiar token
             else:
-                print(f"Ejecutando UPDATE para {clave_lector_a_actualizar}")
+                print(f"[API Confirma] Ejecutando UPDATE para {clave_lector_a_actualizar}")
                 cursor.execute("UPDATE votantes SET ya_voto = 1 WHERE clave_lector = ?", (clave_lector_a_actualizar,))
-               
                 conn.commit()
-
-             
                 if cursor.rowcount > 0:
-                    print("Actualización en DB exitosa.")
+                    print("[API Confirma] Actualización DB exitosa.")
                     actualizacion_exitosa = True
                 else:
-                   
-                     print("Error: La actualización no afectó ninguna fila.")
-                     raise sqlite3.Error("Update failed to affect rows")
+                     print("[API Confirma] Error: UPDATE no afectó filas.")
+                     raise sqlite3.Error("Update failed")
 
-       
         except (sqlite3.Error, ValueError) as e:
-            print(f"Error al procesar la base de datos: {e}")
-            votante_correo = None 
-            actualizacion_exitosa = False 
-
-       
+            print(f"[API Confirma] Error DB: {e}")
+            votante_correo = None # No enviar correo
+            actualizacion_exitosa = False
         finally:
-              
-            if conn:
-                conn.close()
-           
+            if conn: conn.close()
             if token_recibido in TOKENS_PENDIENTES:
-                print(f"Limpiando token: {token_recibido}")
+                print(f"[API Confirma] Limpiando token: {token_recibido}")
                 del TOKENS_PENDIENTES[token_recibido]
 
-       
+        # Enviar correo
         if actualizacion_exitosa and not ya_habia_votado and votante_correo and votante_nombre:
             hora_actual = datetime.now()
-            exito_correo = enviar_correo_confirmacion(votante_correo, votante_nombre, hora_actual)
-            if exito_correo:
-                return jsonify({"message": "Voto registrado y correo enviado."}), 200
-            else:
-                
-                 return jsonify({"message": "Voto registrado, pero falló el envío del correo.", "warning": "email_failed"}), 200
-       
+            exito_correo = enviar_correo_confirmacion(
+                votante_correo,
+                votante_nombre,
+                hora_actual
+            )
+            print("-" * 30)
+            if exito_correo: return jsonify({"message": "Voto confirmado y correo enviado."}), 200
+            else: return jsonify({"message": "Voto confirmado, pero falló envío de correo.", "warning": "email_failed"}), 200
         elif actualizacion_exitosa and ya_habia_votado:
-             return jsonify({"message": "Este voto ya fue registrado anteriormente."}), 200
-       
-        else:
-            return jsonify({"error": "Error interno al registrar el voto en la base de datos."}), 500
-
-  
+            print("-" * 30)
+            return jsonify({"message": "Este voto ya fue registrado anteriormente."}), 200
+        else: # Falló actualización DB
+            print("-" * 30)
+            return jsonify({"error": "Error interno al confirmar el voto en DB."}), 500
     else:
-        print(f"Token inválido o expirado recibido: {token_recibido}")
-       
-        return jsonify({"error": "Token inválido o expirado."}), 400
+         print(f"[API Confirma] Token inválido o expirado: {token_recibido}")
+         print("-" * 30)
+         return jsonify({"error": "Token inválido o expirado para confirmar."}), 400
 
 def iniciar_servidor_flask_en_hilo():
     print(f"Iniciando servidor Flask en http://127.0.0.1:{PORT} (en hilo)")

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Votación</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        label { display: block; margin-top: 10px; }
+        input[type="text"], textarea { width: 90%; max-width: 400px; padding: 8px; margin-top: 5px; }
+        button { padding: 10px 15px; margin-top: 15px; cursor: pointer; }
+        #result { margin-top: 20px; padding: 10px; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+
+    <h1>Formulario de Votación</h1>
+    <p>Por favor, completa la siguiente información.</p>
+
+    <form id="votingForm">
+        <input type="hidden" id="token" name="token" value="{{ token }}">
+
+        <div>
+            <label for="pregunta_1">¿Cuál es tu opción preferida?</label>
+            <input type="text" id="pregunta_1" name="pregunta_1" required>
+        </div>
+
+        <div>
+            <label for="comentario">Algún comentario adicional:</label>
+            <textarea id="comentario" name="comentario" rows="4"></textarea>
+        </div>
+
+        <button type="submit">Enviar Votación</button>
+    </form>
+
+    <div id="result"></div> 
+
+    <script>
+        const form = document.getElementById('votingForm');
+        const resultDiv = document.getElementById('result');
+        const tokenInput = document.getElementById('token');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault(); 
+            resultDiv.textContent = 'Enviando...';
+            resultDiv.className = ''; 
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries()); 
+
+            const payload = {
+                token: data.token, 
+                formData: {
+                    pregunta_1: data.pregunta_1,
+                    comentario: data.comentario
+                }
+            };
+
+            const apiUrl = 'http://127.0.0.1:8000/api/submit-form'; 
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload) 
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    resultDiv.textContent = `Éxito: ${result.message || 'Formulario enviado correctamente.'}`;
+                    resultDiv.className = 'success';
+                    form.reset(); // Limpia el formulario
+                } else {
+                    resultDiv.textContent = `Error: ${result.error || response.statusText || 'Ocurrió un error.'}`;
+                    resultDiv.className = 'error';
+                }
+            } catch (error) {
+                console.error('Error en fetch:', error);
+                resultDiv.textContent = 'Error de conexión al enviar el formulario.';
+                resultDiv.className = 'error';
+            }
+        });
+    </script>
+
+</body>
+</html>

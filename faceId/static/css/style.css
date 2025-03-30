@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+
+
+body {
+  background: linear-gradient(to bottom, #611232, #8b1d47, #611232);
+  padding: 0;
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.barra-superior{
+  background-color: white;
+  height: 100%;
+  width: 100%;
+}
+
+.img-decoration{
+  height: 4vw;
+  padding: 0px 0px 0px 20px;
+}
+
+.contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40vh;
+}
+
+.bloque-centrado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  width: 80vw;
+  max-width: 500px;
+  min-height: 20vh;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 10px 20px 20px rgba(0, 0, 0, 0.1);
+}
+
+.Nota-texto{
+  text-align: center;
+}
+
+h1 {
+  font-size: 4rem;
+  color: #ffffff;
+  text-align: center;
+}
+
+h2 {
+  font-size: 1.2rem;
+  color: #666;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.campo{
+  display: grid;
+}
+
+.campo-texto {
+  width: 100%;
+  max-width: 230px;
+  height: 2px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  resize: none;
+}
+
+.Verificar {
+  background-color: #611232; 
+  color: white; 
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px; 
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  margin: 10px;
+}
+
+
+.Verificar:hover {
+  background-color: #611232; 
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px); 
+}
+
+
+.Verificar:active {
+  background-color: #611232;
+  transform: translateY(1px);
+}
+
+
+.boton-verificar {
+  background-color: #007bff;
+  color: white;
+  font-size: 1rem;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+  margin-top: 10px;
+}
+
+.boton-verificar:hover {
+  background-color: #0056b3;
+}
+
+
+.nota {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #555;
+  text-align: center;
+}

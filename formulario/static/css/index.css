@@ -1,0 +1,328 @@
+*{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+html, body{
+    margin: 0;
+    padding: 0;
+}
+
+html{
+    background-image: url(/static/img/escudo-nacional-mexicano-1.svg);
+    background-repeat: repeat;
+    background-size: 100px;
+}
+
+body{
+    background-color: rgba(196, 188, 183, 0.729);
+}
+
+.todo{
+    background-color: rgb(108, 90, 69);
+    width: 100%;
+    max-width: 1100px;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+    padding:40px;
+    box-sizing: border-box;
+}
+
+.votacion{
+    margin: auto;
+    width: 100%;
+    max-width: 1000px;
+    background-image: url(/static/img/escudo-nacional-mexicano-1.svg);
+    background-repeat: repeat;
+    background-size: 100px;
+}
+
+.voto{
+    background-color: rgba(196, 188, 183, 0.729);
+}
+
+.encabezado{
+    margin-bottom: 5px;
+}
+
+.encabezado h4,h1{
+    color: white;
+    text-align: center;
+    margin: 0;
+}
+
+.encabezado h4{
+    font-size: 18px;
+}
+
+.encabezado h1{
+    font-size: 38px;
+}
+
+.modulo{
+    display: flex;
+    width: 100%;
+    max-width: 1000px;
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+label{
+    margin-right: 5px;
+    font-weight: bold;
+
+}
+
+input{
+    margin-right: 15px;
+}
+
+.input_50, .input_25{
+    display: flex;
+    width: 50%;
+}
+
+.input_50 input{
+    width: 50%;
+}
+
+.input_25 input{
+    width: 25%;
+}
+
+.indicacion{
+    width: 100%;
+    box-sizing: content-box;
+}
+
+.indicacion h2{
+    text-align: center;
+    font-style: italic;
+    color: rgba(248, 18, 129, 0.872);
+    font-size: 29px;
+    padding: 25px 0;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.opciones{
+    box-sizing: border-box;
+    margin: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 0 10px 50px;
+}
+
+.opciones::after{
+    content: "";
+    width: 450px;
+}
+
+.opcion{
+    display: flex;
+    width: 100%;
+    max-width: 450px;
+    height: 250px;
+    border: 3px solid rgb(90, 72, 50);
+    border-radius: 10px;
+    background-color: white;
+}
+
+.opcion .nombre_voto p{
+    font-size: 18px;
+    font-weight: bold;
+    max-width: 90%;
+    text-align: center;
+    height: 40px;
+    margin: 0;
+    margin-top: 18px;
+}
+
+.imagenes{
+    width: 150px;
+    height: 250px;
+}
+
+.opcion img{
+    margin: 120px 35px 50px;
+    box-sizing: border-box;
+    width: 80px;
+    height: 80px;
+}
+
+.nombre_voto{
+    width: 300px;
+    height: 300px;
+}
+
+.seleccionado{
+    width: 100%;
+    height: 192px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border: none;
+    border-radius: 100%;
+    outline: none;
+}
+
+.input_seleccionado{
+    padding: 0;
+    font-size: 20px;
+}
+
+.seleccionado:focus{
+    border: none !important;
+}
+
+.seleccionado img{
+    margin: 0 !important;
+    width: 100%;
+    height: 100%;
+    padding: 50px;
+    border-radius: 100%;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(128, 128, 128, 0.637); /* Black w/ opacity */
+    border-radius: 10px;
+}
+  
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #ffffff;
+    margin: 0 auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    height: 500px;
+    width: 100%; /* Could be more or less, depending on screen size */
+    max-width: 1000px;
+}
+
+.nav_confirmar_voto span, h2{
+    margin: auto;
+    height: 100px;
+    padding: 30px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+}
+  
+.texto_confirmar_voto{
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.texto_confirmar_voto p{
+    font-size: 22px;
+}
+
+.boton_confirmar_voto{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+.boton_confirmar_voto button{
+    font-size: 20px;
+    width: 30%;
+    height: 60px !important;
+    border-radius: 8px;
+    margin: auto;
+    background-color: white;
+}
+
+.boton_color {
+    background-color: rgb(71, 35, 11) !important;
+    color: white;
+    border: none;
+}
+
+  /* The Close Button */
+  .close {
+    color: #000000;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .partido2{
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .partido2 img{
+    margin: 0;
+  }
+
+.tamano{
+    font-size: 25px !important;
+  }
+
+  .partido2 .colo{
+    font-size: 20px !important;
+    color: rgb(155, 15, 15) !important;
+  }
+  /* --- Estilos para el Div de Feedback --- */
+.feedback-message {
+    margin-top: 20px; /* Espacio arriba */
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    text-align: center;
+    font-weight: bold;
+    /* Oculto inicialmente o con mensaje por defecto si prefieres */
+    /* display: none; */
+}
+
+.feedback-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    display: block; /* Asegurar que sea visible */
+}
+
+.feedback-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    display: block; 
+}
+
+.feedback-error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    display: block; 
+}
+

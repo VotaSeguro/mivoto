@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingreso de Clave de Lector</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .alert { padding: 15px; margin-bottom: 20px; border: 1px solid transparent; border-radius: 4px; }
+        .alert-info { color: #31708f; background-color: #d9edf7; border-color: #bce8f1; }
+        .alert-warning { color: #8a6d3b; background-color: #fcf8e3; border-color: #faebcc; }
+        .alert-error { color: #a94442; background-color: #f2dede; border-color: #ebccd1; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"] { width: 300px; padding: 8px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; text-transform: uppercase; }
+        button { padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+    <h1>Verificación de Votante</h1>
+
+    <!-- Mostrar mensajes flash de Flask -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('verificar_clave') }}" method="POST">
+        <label for="clave_lector">Ingrese su Clave de Lector (18 caracteres):</label>
+        <input type="text" id="clave_lector" name="clave_lector" required minlength="18" maxlength="18" pattern="[A-Z0-9]{18}" title="Ingrese 18 letras mayúsculas o números">
+        <button type="submit">Verificar e Iniciar Cámara</button>
+    </form>
+
+    <hr>
+    <p><small>Nota: Al verificar, se abrirá una ventana separada para la cámara. Mire esa ventana y presione 'Q' en ella para cancelar.</small></p>
+
+</body>
+</html>
