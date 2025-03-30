@@ -1,0 +1,542 @@
+
+
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+		<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+		<title>Registro Nacional de Profesionistas</title>
+		<link rel="shortcut icon" href="/cedula/img/favicon.ico" type="image/png" />	
+		
+		
+		
+		
+		<script type="text/javascript" charset="UTF-8">
+			var isDownload = false;
+				djConfig = {
+					isDebug: false,
+					parseOnLoad: true,	
+					locale: "es",					               
+					modulePaths: {
+						"custom": "../custom",
+						"util": "../../../util"
+						},
+					xdWaitSeconds: 10
+				};
+		</script>
+		
+		
+		
+		<script src="/cedula/js/dojo/1.5/dojo/dojo.js" type="text/javascript" charset="UTF-8"></script>	
+		<link href="/cedula/js/dojo/1.5/dijit/themes/nihilo/dojo_nihilo.css" rel="stylesheet" type="text/css"  charset="UTF-8"/>
+		<link href="/cedula/js/dojo/1.5/dojox/grid/resources/nihiloGrid.css" rel="stylesheet" type="text/css"  charset="UTF-8"/>
+		
+		
+		<script src="/cedula/js/presidencia/consulta-cedula.js" type="text/javascript" charset="UTF-8"></script>	
+		<script src="/cedula/js/presidencia/terminos.js" type="text/javascript" charset="UTF-8"></script>
+	
+		<script src="https://framework-gb.cdn.gob.mx/gobmx.js"></script>
+		<link href="https://framework-gb.cdn.gob.mx/assets/styles/main.css"	rel="stylesheet">
+		<link href="/cedula/css/gobmx.css" rel="stylesheet" type="text/css" charset="ISO-8859-1" />
+		<link href="/cedula/css/gobmxGrid.css" rel="stylesheet" type="text/css" charset="ISO-8859-1" />
+	
+	
+		<script type="text/javascript"> 
+ 			var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+ 			document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+ 		</script>
+		<script type="text/javascript"> 
+			try {
+ 				var pageTracker = _gat._getTracker("UA-20056227-1");
+ 				pageTracker._trackPageview("Pagina Principal Busqueda Avanzada");
+ 			} catch(err) {}
+	 	</script>
+		<script type="text/javascript"  charset="UTF-8">
+			dojo.require("dojo.parser");	
+	    	dojo.require("custom.PageTable");    
+	    	dojo.require("custom.MyDialog");	
+	    	dojo.require( "util.common");
+	    	dojo.require("custom.jmessages");
+			dojo.require("dojox.grid.DataGrid");
+			dojo.require("dijit.form.Form");
+			dojo.require("dijit.layout.TabContainer");
+			dojo.require("dijit.layout.ContentPane");
+			dojo.require("dojo.data.ItemFileReadStore"); 
+			dojo.require("dijit.form.ValidationTextBox");
+			dojo.require("dojo.data.ItemFileWriteStore");
+			dojo.require("dijit.form.TextBox");
+			dojo.require("dijit.form.Button");
+			dojo.require("dijit.form.FilteringSelect");		
+			dojo.require("dijit.form.CheckBox");
+			dojo.require("dijit.Tooltip");
+			
+			
+			var messagesJS = { context:"/cedula/", allWidgets:[], fieldCedula:[], fieldGenerales:[], fieldExtra:[] };
+	
+	
+			var exportLayout = [ {cells: [
+					{ name: 'Cédula', field: 'idCedula', width: 'auto' },
+					{ name: 'Nombre', field: 'nombre', width: 'auto'},
+					{ name: 'Primer apellido', field: 'paterno', width: 'auto'},
+					{ name: 'Segundo apellido', field: 'materno', width: 'auto'},
+					{ name: 'Género', field: 'sexo', width: 'auto'},
+					{ name: 'Profesión', field: 'titulo', width: 'auto'},
+					{ name: 'Año de expedición', field: 'anioreg', width: 'auto'},
+					{ name: 'Institución', field: 'desins', width: 'auto'},
+					{ name: 'Tipo', field: 'tipo', width: 'auto'}
+				] } ];
+			
+	
+			
+		
+			var storeAnnio = new dojo.data.ItemFileWriteStore({data: {identifier: 'name', items:[]}});
+			storeAnnio.newItem( { name: '', id:'' } );
+			
+			var templateFilter = {desc: "página # de #" };
+			var storeGenero = new dojo.data.ItemFileWriteStore({data: {identifier: 'name', items:[]}});
+			storeGenero.newItem( { name: '', id:'' } );
+			storeGenero.newItem( { name: 'HOMBRE', id:'1' } );
+			storeGenero.newItem( { name: 'MUJER', id:'2' } );		
+			var _connections = [];
+			var _instituciones ={todas:"TODAS"};
+			var _genero = { hombre:'HOMBRE', mujer: 'MUJER'};
+			var messages={ limite: "El resultado de la b&uacute;squeda contiene m&aacute;s de 1000 registros.", context:"/cedula/", first: '' };
+
+			
+	        
+	        
+	       
+	        function goContacto(){
+	        	window.location.href = messages.context+"presidencia/contacto.action";        	
+	        }
+	        function goMaterialApoyo(){
+	        	window.location.href = messages.context+"presidencia/apoyo.action";
+	        }
+	        function goPreguntasFrecuentes(){
+	        	window.location.href = "http://www.sep.gob.mx/es/sep1/Preguntas__Frecuentes";
+	        }
+	        
+	        function findGenerales(){
+	        	dojo.style('tableGenerales','display','block');
+	        	dojo.style('tableCedula','display','none');
+	        	dijit.byId( 'mainContainer' ).selectChild( "tab1" );
+	        	clearSearch();
+	        	
+	        }
+	        
+	        function clearSearch(){
+	        	if( dijit.byId( 'cedulasGrid' ) ) {
+	 				dijit.byId( 'cedulasGrid' ).destroy(true);
+	 			}   
+	        	
+	        	dojo.byId("detalleCedula").innerHTML = '';            
+	            
+	            dojo.byId("detalleNombre").innerHTML = '';
+	            
+	            dojo.byId("detalleGenero").innerHTML = '';
+	                              
+	            dojo.byId("detalleProfesion").innerHTML ='';
+	            dojo.byId("detalleFecha").innerHTML ='';
+	            dojo.byId("detalleInstitucion").innerHTML ='';
+	            dojo.byId("detalleTipo").innerHTML = '';
+	            dijit.byId('buscaCedulaJson').reset();
+	        }
+	        
+	        function goCorrecionCedula(){
+	        	window.location.href = messagesJS.context+"presidencia/correccionDatos.action";
+	        }
+	        function bienvenida(){
+	        	window.location.href = messagesJS.context+"presidencia/bienvenida.action";
+	        }
+	        
+	        function terminos(){
+	        	window.location.href = messagesJS.context+"presidencia/terminos.action";
+	        }
+	        
+	        function consejos(){
+	        	window.location.href = messagesJS.context+"presidencia/consejos.action";
+	        }
+	        
+	        function titulosElectronicos(){
+	        	window.location.href = messagesJS.context+"presidencia/titulosElectronicos.action";
+	        }
+	        
+	        function findBasica(){
+	        	dojo.style('tableGenerales','display','none');
+	        	dojo.style('tableCedula','display','block');
+	        	dijit.byId( 'mainContainer' ).selectChild( "tab1" );
+	        	clearSearch();
+	        }	        
+	       
+		</script>
+	</head>
+	<body class="nihilo" >
+	
+		
+			
+		
+		<div style="display:none">
+			1.00-b95 | 2025-02-26 20:27:02 | PedroFloresLÂ¢pez &nbsp;&nbsp;&nbsp;&nbsp;
+		</div>
+	
+		<main role="main">
+			<nav class="navbar navbar-inverse sub-navbar navbar-fixed-top">
+				<div class="container">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#subenlaces">
+							<span class="sr-only">Interruptor de Navegación</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="/">SEP</a>
+						</div>
+						<div class="collapse navbar-collapse" id="subenlaces">
+						<ul class="nav navbar-nav navbar-right">
+							<li class="dropdown">
+					          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Inicio<span class="caret"></span></a>
+					          <ul class="dropdown-menu" role="menu">
+					            <li><a href="javascript:bienvenida();">Bienvenida</a></li>
+					            <li><a href="javascript:terminos();">T&eacute;rminos y condiciones</a></li>
+					            <li><a href="javascript:consejos();">Consejos para una mejor b&uacute;squeda</a></li>
+					            
+					          </ul>
+					        </li>
+					        <li class="dropdown">
+					          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">B&uacute;squeda<span class="caret"></span></a>
+					          <ul class="dropdown-menu" role="menu">
+					            <li><a href="javascript:findGenerales();">Detallada</a></li>
+					            <li><a href="javascript:findBasica();">C&eacute;dula</a></li>
+					            
+					            
+					          </ul>
+					        </li>
+					        
+							<li><a href="javascript:titulosElectronicos();">Datos Abiertos</a></li>
+							<li><a href="javascript:goPreguntasFrecuentes();">Preguntas frecuentes</a></li>
+							<li><a href="javascript:goMaterialApoyo();">Video de ayuda</a></li>
+							<li><a href="javascript:goContacto();">Contacto</a></li>					
+						</ul>
+					</div>
+				</div>
+			</nav>
+	        <div class="container top-buffer-submenu">
+	        	<br />
+				<div class="row">
+					<div class="col-sm-8" id="breadcrumb_rnp">
+						<ol class="breadcrumb">
+							<li><a href="https://www.gob.mx/"><i class="icon icon-home"></i></a></li>
+							<li><a href="http://www.gob.mx/sep">Inicio</a></li>
+							<li class="active">C&eacute;dula Profesional</li>
+						</ol>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-8">
+	          	        <h2>Registro Nacional de Profesionistas</h2>
+	          	        <h3>Consulta de c&eacute;dulas profesionales</h3>
+	          	        <hr class="red">
+	          	        <p align="justify">Este  apartado tiene como prop&oacute;sito ampliar los criterios de b&uacute;squeda de  profesionistas que registran sus t&iacute;tulos y cuentan con c&eacute;dula profesional con  efectos de patente; esto delimita la responsabilidad del Registro Nacional  de Profesionistas,  al definirla  como  la &uacute;nica instancia v&aacute;lida para hacer uso de esta informaci&oacute;n.</p>
+						<p align="justify">La  informaci&oacute;n publicada en este sitio, de acuerdo a los criterios ordenados por  el Instituto  Nacional de Transparencia&nbsp; Acceso a la  Informaci&oacute;n y Protecci&oacute;n de Datos Personales (INAI), es de  car&aacute;cter p&uacute;blico y  constantemente se  actualiza; esto determina que la Secretar&iacute;a de Educaci&oacute;n P&uacute;blica (SEP) se  deslinde y no sea  responsable del  uso, adecuaciones y modalidades de la informaci&oacute;n que pudieran aparecer en  otros sitios web.
+	               	</div>
+	           	</div>
+	           	<div class="row">
+	           		<div class="col-sm-12">
+	           			<div class="alert alert-danger" tabindex="0" id="divD" style="display: none;">
+							<strong>¡Error de Registro! </strong>
+							<span id="lblD">Alguna validaci&oacute;n no cumple o no has llenado los campos requeridos. Por favor verifica.</span>
+						</div>
+					</div>	
+	           	</div>
+	           	
+				<div class="bottom-buffer">
+					<form id="buscaCedulaJson" name="buscaCedulaJson" method="post" dojoType="dijit.form.Form">
+						<input id="maxResult" name="maxResult" type="hidden" value="1000" />
+						<div dojoType="dijit.layout.TabContainer" id="mainContainer" doLayout="false">
+			                <div dojoType="dijit.layout.ContentPane" title="B&uacute;squeda" selected="true" id="tab1" style="display:none;min-height:150px;"> 
+			                	<div class="row">
+									<div class="col-md-12">            	        	        
+										<h3>Datos de consulta</h3>
+										<hr class="red">                        	
+									</div>
+								</div>
+			                
+			                	<div id="tableGenerales" style='display:block'>
+									
+
+
+
+<div class="row">
+	<div class="col-md-4">
+		<div class="form-group">
+			<label for="nombre" class="control-label">
+				Nombre(s)<span id="required_nombre" class="text-muted">*</span>:
+			</label>
+			<input id="nombre" name="nombre" class="form-control" maxlength="50"/>
+			<span id="required_lbl_nombre" class="labelWithoutError">
+				Este campo es obligatorio
+			</span>			
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div for="paterno" class="form-group">
+			<label class="control-label">
+				Primer apellido<span id="required_paterno" class="text-muted">*</span>:
+			</label>
+			<input id="paterno" name="paterno" class="form-control" maxlength="50"/>
+			<span id="required_lbl_paterno" class="labelWithoutError">
+				Este campo es obligatorio
+			</span>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div for="materno" class="form-group">
+			<label class="control-label">
+				Segundo apellido
+			</label>		
+			<input id="materno" name="materno" class="form-control" maxlength="50" />
+			<span id="validation_lbl_materno" class="labelWithoutError">
+				Este campo es obligatorio
+			</span>
+		</div>		
+	</div>
+</div>
+
+
+
+<!-- 
+
+		<div class="checkbox">
+		    <label>
+				<input name="condicionesGenerales" id="condicionesGenerales"
+				dojoType="dijit.form.CheckBox"
+				
+				value="false" type="checkbox" class="checkbox"
+				onClick="showTerminos()">
+				Acepto<span id="areg_acepto" class="form-text">*</span>:
+			</label>
+	  	</div>	 -->
+	  	
+	  	
+            			
+		
+        	<div class="pull-left text-muted text-vertical-align-button">
+            	(*) Campos obligatorios
+			</div>
+		
+		<div class="pull-right text-muted text-vertical-align-button">
+			<button dojoType="dijit.form.Button" onclick="buscaCedula()">			
+				Consultar
+			</button>
+		</div>
+                		
+
+
+								</div>
+								<div id="tableCedula" style='display:none'>
+									
+
+
+
+
+<div class="row">	
+	<div class="col-md-4">						
+		<div class="form-group">
+			<label class="control-label">
+				N&uacute;mero de C&eacute;dula<span id="required_idCedula" class="form-text">*</span>:								 
+			</label>
+			<input id="idCedula" name="idCedula" value=''/>
+			<span id="required_lbl_idCedula" class="labelWithoutError">
+				Este campo es obligatorio
+			</span>		
+		</div>
+	</div>
+	
+	
+							
+	
+	<div class="col-md-4">						
+		<div class="form-group">
+			<p class="text-left">
+				<br>
+				<button dojoType="dijit.form.Button" onclick="buscaCedula()">
+					Consultar
+				</button>
+			</p>
+		</div>
+	</div>	
+	
+</div>
+
+
+<div class="form-group">
+    <div class="col-sm-4">
+    	<div class="pull-left text-muted text-vertical-align-button">
+    		(*) Campos obligatorios			
+		</div>
+		
+		
+	</div>
+</div>
+
+               
+
+								</div>
+								
+			                </div>
+			                <div dojoType="dijit.layout.ContentPane" title="Resultados" id="tab2" style="display:none;min-height:150px;">
+			                	<div class="row">
+									<div class="col-md-12">            	        	        
+										<h3>Resultados de la b&uacute;squeda</h3>
+										<hr class="red">                        	
+									</div>
+								</div>	
+								<div class="row">
+									<div class="col-md-12">
+										<div id="content">
+											<div id="cedulasGrid">
+											</div>
+											
+										</div>
+									</div>
+								</div>                
+			                </div>
+			                <div dojoType="dijit.layout.ContentPane" title="Detalle" id="tab3" style="display:none;min-height:150px;">
+			                	<div class="row">
+									<div class="col-md-12">
+										<div class="row">
+											<div class="col-sm-8">					            	        	        
+												<h3>Detalle del registro</h3>
+												<hr class="red">
+											</div>
+													
+										</div>
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="detalleCedula" class="control-label">
+														N&uacute;mero de C&eacute;dula:
+													</label>
+													<div id="detalleCedula">
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="detalleCedula" class="control-label">
+														Nombre:	
+													</label>
+													<div id="detalleNombre">
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="detalleCedula" class="control-label">
+														G&eacute;nero:	
+													</label>
+													<div id="detalleGenero">
+													</div>
+												</div>
+											</div>
+										</div>
+										
+										
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="detalleCedula" class="control-label">
+														Profesi&oacute;n:	
+													</label>
+													<div id="detalleProfesion">
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="detalleCedula" class="control-label">
+														Año de expedici&oacute;n:		
+													</label>
+													<div id="detalleFecha">
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="detalleCedula" class="control-label">
+														Instituci&oacute;n:		
+													</label>
+													<div id="detalleInstitucion">
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="detalleCedula" class="control-label">
+														Tipo:			
+													</label>
+													<div id="detalleTipo">
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<a href="javascript:goCorrecionCedula();">Solicitud de correcci&oacute;n de datos<span class="glyphicon glyphicon glyphicon-link" aria-hidden="true"></span></a>
+												</div>
+											</div>
+										</div>
+										<!-- <div class="row">
+											<div class="col-md-8">
+												<p style="text-align: justify;">Los datos que se reflejan son preliminares, en caso de  requerir un <strong>documento oficial, </strong>ser&aacute; necesario <strong>realizar el tr&aacute;mite de </strong><a href="http://www.sep.gob.mx/wb/sep1/sep1_Informe_de_Antecedentes_Profesionales_">&quot;Antecedentes  Profesionales&quot;<span class="glyphicon glyphicon glyphicon-link" aria-hidden="true"></a> ante  la <strong>Direcci&oacute;n General de Profesiones<em>.</em></strong>&nbsp; </p>										
+											</div>
+										</div>  -->
+										<div class="row">
+											<div class="col-md-8">
+												<h3>* Glosario de Nomenclaturas</h3>
+												<hr class="red">    
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<b>AE</b>: Autorizaci&oacute;n de Especialidad
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<b>AEIE</b>: Autorizaci&oacute;n de Especialidad por Instituci&oacute;n Educativa
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<b>AECEM</b>: Autorizaci&oacute;n de Especialidad por Consejo de Especialidades M&eacute;dicas
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<b>AESSA</b>: Autorizaci&oacute;n de Especialidad por Sector Salud
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>							       
+			                </div>		
+			            </div>
+					</form>
+				</div>
+			</div>
+			
+			
+	       
+		</main>
+	
+	    
+	</body>
+</html>
+

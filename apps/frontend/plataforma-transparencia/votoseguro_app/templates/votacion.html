@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votación en Tiempo Real</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f4f4f4;
+            padding: 20px;
+        }
+        canvas {
+            max-width: 100%;  /* Para hacer que ocupe todo el ancho disponible */
+            height: 600px;    /* Altura personalizada más grande */
+            margin: 20px auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Votación en Tiempo Real</h2>
+    <canvas id="voteChart"></canvas>
+    
+    <script>
+        const ctx = document.getElementById('voteChart').getContext('2d');
+        
+        // Colores específicos para cada partido
+        const colors = {
+            "PARTIDO ACCION NACIONAL": "#1E90FF",  // Azul
+            "PARTIDO REVOLUCIONARIO INSTITUCIONAL": "#32CD32",  // Verde
+            "PARTIDO DE LA REVOLUCION DEMOCRATICA": "#FFD700",  // Amarillo
+            "PARTIDO VERDE ECOLOGISTA DE MEXICO": "#008000",  // Verde oscuro
+            "PARTIDO DEL TRABAJO": "#F39C12",  // Naranja
+            "MOVIMIENTO CIUDADANO": "#FF7F50",  // Naranja
+            "MORENA": "#8B4513"  // Marrón
+        };
+
+        // Datos de los partidos y candidatos
+        const parties = {
+            "PARTIDO ACCION NACIONAL": "Ricardo Anaya Cortés",
+            "PARTIDO REVOLUCIONARIO INSTITUCIONAL": "José Antonio Meade Kuribreña",
+            "PARTIDO DE LA REVOLUCION DEMOCRATICA": "Alejandra Barrales Magdaleno",
+            "PARTIDO VERDE ECOLOGISTA DE MEXICO": "Manuel Velasco Coello",
+            "PARTIDO DEL TRABAJO": "Gerardo Fernández Noroña",
+            "MOVIMIENTO CIUDADANO": "Jorge Álvarez Máynez",
+            "MORENA": "Claudia Sheinbaum Pardo"
+        };
+
+        // Datos de la votación inicial (porcentajes aleatorios)
+        const voteData = {
+            labels: Object.keys(parties),
+            datasets: [{
+                label: 'Porcentaje de Votos',
+                data: Object.keys(parties).map(() => Math.floor(Math.random() * 15) + 5),  // Datos aleatorios entre 5% y 20%
+                backgroundColor: Object.keys(parties).map(party => colors[party]),  // Colores para cada partido
+                borderColor: Object.keys(parties).map(party => colors[party].replace('1)', '0.7)')),
+                borderWidth: 2
+            }]
+        };
+
+        // Crear la gráfica de pastel
+        const voteChart = new Chart(ctx, {
+            type: 'pie',  // Gráfico de pastel
+            data: voteData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',  // Mostrar la leyenda en la parte superior
+                        labels: {
+                            font: {
+                                size: 14,
+                                family: 'Arial, sans-serif'
+                            },
+                            generateLabels: function(chart) {
+                                const labels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
+                                // Agregar los nombres de los candidatos en la leyenda
+                                labels.forEach((label, index) => {
+                                    label.text = label.text + " (" + parties[chart.data.labels[index]] + ")";
+                                });
+                                return labels;
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                const percentage = tooltipItem.raw.toFixed(2) + '%';
+                                const partyName = tooltipItem.label;
+                                const candidate = parties[partyName];
+                                return partyName + ': ' + percentage + ' (' + candidate + ')';
+                            }
+                        }
+                    },
+                    datalabels: {
+                        formatter: (value, context) => {
+                            const partyName = context.chart.data.labels[context.dataIndex];
+                            const candidate = parties[partyName];
+                            return value.toFixed(2) + '%\n' + candidate;  // Mostrar porcentaje y nombre del candidato
+                        },
+                        color: '#fff',
+                        font: {
+                            weight: 'bold',
+                            size: 16
+                        }
+                    }
+                }
+            }
+        });
+
+        // Función para actualizar los votos de forma más realista y mantener el total de 100%
+        function updateVotes() {
+            const totalVotes = 100;  // Total del porcentaje (100%)
+            
+            // Simulamos un cambio suave en los porcentajes
+            let newVotes = voteData.datasets[0].data.map((vote, index) => {
+                const change = Math.floor(Math.random() * 3) - 1;  // Cambios entre -1 y +2 por partido
+                const newVote = Math.max(0, vote + change);  // Asegurar que no haya porcentajes negativos
+                return newVote;
+            });
+
+            // Asegurar que Movimiento Ciudadano tenga una ligera preferencia
+            newVotes[5] += 2;  // Movimiento Ciudadano (índice 5) obtiene 2% más en cada actualización
+
+            // Recalcular el total y ajustar para que siempre sume 100%
+            const total = newVotes.reduce((acc, vote) => acc + vote, 0);
+            newVotes = newVotes.map(vote => (vote / total) * totalVotes);  // Normalizamos los porcentajes
+
+            // Actualizar los datos en la gráfica
+            voteData.datasets[0].data = newVotes;
+            voteChart.update();  // Actualiza la gráfica
+        }
+
+        // Actualizar votos cada 2 segundos
+        setInterval(updateVotes, 2000);
+    </script>
+</body>
+</html>

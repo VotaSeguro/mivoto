@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultar Datos</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            padding: 30px;
+            text-align: center;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #e0f7fa;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .error {
+            color: red;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Consultar Datos</h2>
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" placeholder="Escribe el nombre">
+        
+        <label for="paterno">Apellido Paterno:</label>
+        <input type="text" id="paterno" placeholder="Escribe el apellido paterno">
+        
+        <label for="materno">Apellido Materno:</label>
+        <input type="text" id="materno" placeholder="Escribe el apellido materno">
+        
+        <button onclick="consultarDatos()">Consultar Datos</button>
+
+        <div id="resultado" class="result" style="display: none;">
+            <!-- Aquí se mostrarán los resultados -->
+        </div>
+        <div id="error" class="error" style="display: none;">
+            <!-- Aquí se mostrarán los errores -->
+        </div>
+    </div>
+
+    <script>
+        function consultarDatos() {
+            const nombre = document.getElementById('nombre').value;
+            const paterno = document.getElementById('paterno').value;
+            const materno = document.getElementById('materno').value;
+
+            // Validar campos vacíos
+            if (!nombre || !paterno || !materno) {
+                alert('Por favor, completa todos los campos');
+                return;
+            }
+
+            // Hacer solicitud a la vista de Django
+            axios.get('/consultar_datos/', {
+                params: {
+                    nombre: nombre,
+                    paterno: paterno,
+                    materno: materno
+                }
+            })
+            .then(function (response) {
+                if (response.data.resultado) {
+                    let resultHTML = '<h3>Datos Consultados</h3>';
+                    resultHTML += '<ul>';
+                    response.data.resultado.forEach(item => {
+                        resultHTML += `<li>Cédula: ${item.cedula} - Nombre: ${item.nombre} ${item.paterno} ${item.materno}</li>`;
+                    });
+                    resultHTML += '</ul>';
+                    document.getElementById('resultado').innerHTML = resultHTML;
+                    document.getElementById('resultado').style.display = 'block';
+                    document.getElementById('error').style.display = 'none';
+                } else {
+                    showError(response.data.error);
+                }
+            })
+            .catch(function (error) {
+                showError('Error al realizar la consulta. Intenta nuevamente.');
+            });
+        }
+
+        function showError(message) {
+            document.getElementById('error').innerHTML = message;
+            document.getElementById('error').style.display = 'block';
+            document.getElementById('resultado').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

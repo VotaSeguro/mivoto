@@ -1,0 +1,24 @@
+{
+    "canisters": {
+        "backend": {
+            "main": "src/backend/voting.mo",
+            "type": "motoko",
+            "candid": "src/declarations/backend.did"
+        },
+        "test": {
+            "main": "src/tests/voting.test.mo",
+            "type": "motoko"
+        }
+    },
+    "defaults": {
+        "build": {
+            "args": "",
+            "packtool": ""
+        },
+        "start": {
+            "args": ""
+        },
+        "type": "custom"
+    },
+    "version": 1
+} 

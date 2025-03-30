@@ -1,0 +1,28 @@
+type Party = record {
+    id: principal;
+    name: text;
+    description: text;
+    registrationTime: int;
+    candidateCount: nat;
+};
+
+type PartyError = variant {
+    NotFound;
+    AlreadyExists;
+    InvalidInput;
+    NotAuthorized;
+};
+
+type Result_1 = variant {
+    ok: Party;
+    err: PartyError;
+};
+
+service : {
+    registerParty: (text, text) -> (Result_1);
+    getParty: (principal) -> (Result_1) query;
+    getAllParties: () -> (vec Party) query;
+    updateParty: (text, text) -> (Result_1);
+    incrementCandidateCount: (principal) -> (Result_1);
+    getPartyStats: () -> (vec record { principal; nat }) query;
+} 

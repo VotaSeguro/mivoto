@@ -1,0 +1,93 @@
+type Error = variant {
+    NotFound;
+    AlreadyExists;
+    NotAuthorized;
+    InvalidInput;
+    DuplicateVote;
+    InvalidDistrict;
+    InvalidParty;
+};
+
+type User = record {
+    id: principal;
+    name: text;
+    email: text;
+    districtId: text;
+    registrationTime: int;
+    role: text;
+};
+
+type Candidate = record {
+    id: principal;
+    name: text;
+    party: text;
+    districtId: text;
+    voteCount: nat;
+    registrationTime: int;
+};
+
+type Party = record {
+    id: principal;
+    name: text;
+    description: text;
+    registrationTime: int;
+    candidateCount: nat;
+};
+
+type Vote = record {
+    userId: principal;
+    candidateId: principal;
+    districtId: text;
+    timestamp: int;
+};
+
+type VoteStats = record {
+    totalVotes: nat;
+    districtVotes: vec record { text; nat };
+    candidateVotes: vec record { principal; nat };
+};
+
+type Result_1 = variant {
+    ok: User;
+    err: Error;
+};
+
+type Result_2 = variant {
+    ok: Candidate;
+    err: Error;
+};
+
+type Result_3 = variant {
+    ok: Vote;
+    err: Error;
+};
+
+type Result_4 = variant {
+    ok: Party;
+    err: Error;
+};
+
+service : {
+    // User Management
+    registerUser: (name: text, email: text, districtId: text) -> (Result_1);
+    getUser: (userId: principal) -> (Result_1) query;
+
+    // Candidate Management
+    registerCandidate: (name: text, party: text, districtId: text) -> (Result_2);
+    getCandidate: (candidateId: principal) -> (Result_2) query;
+
+    // Party Management
+    registerParty: (name: text, description: text) -> (Result_4);
+    getParty: (partyId: principal) -> (Result_4) query;
+    getAllParties: () -> (vec Party) query;
+    updateParty: (partyId: principal, newName: text) -> (Result_4);
+
+    // Voting
+    vote: (candidateId: principal, districtId: text) -> (Result_3);
+    getVote: (userId: principal) -> (Result_3) query;
+
+    // Statistics
+    getVoteStats: () -> (VoteStats) query;
+    getVotesByDistrict: (districtId: text) -> (vec Vote) query;
+    getCandidatesByDistrict: (districtId: text) -> (vec Candidate) query;
+} 

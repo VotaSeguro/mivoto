@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elecciones Presidenciales</title>
+    <link rel="stylesheet" href="/static/css/index.css">
+</head>
+
+<body>
+    <div class="todo">
+        <div class="encabezado">
+            <h4>PROCESO ELECTORAL FEDERAL 2024 - 2025</h4>
+            <h1>PRESIDENCIA</h1>
+        </div>
+
+        <div class="votacion">
+            <form class="voto" action="POST">
+                <input type="hidden" id="token" value="{{ token }}">
+                <div class="indicacion">
+                    <h2>Marque el recuadro de su preferencia</h2>
+                </div>
+
+                <div class="opciones">
+                    <!-- Opción 1: Partido Acción Nacional -->
+                    <div class="opcion">
+                        <div class="imagenes">
+                            <img src="/static/img/PAN_logo_(Mexico).svg.png" alt="">
+                        </div>
+                        <div class="nombre_voto">
+                            <p>PARTIDO ACCION NACIONAL</p>
+                            <button type="button" class="seleccionado" id="btnPAN">
+                                <p>Ricardo Anaya Cortés</p>
+                                <img src="/static/img/xRoja.webp" alt="">
+                            </button>
+
+                            <!-- Modal para PAN -->
+                            <div id="modalPAN" class="modal">
+                                <div class="modal-content">
+                                    <div class="nav_confirmar_voto">
+                                        <span class="close" data-modal="modalPAN">x</span>
+                                        <h2>Confirmar Voto</h2>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="texto_confirmar_voto">
+                                        <div class="partido2">
+                                            <p class="tamano">Estas votando por: </p><br>
+                                            <p class="colo">PARTIDO ACCION NACIONAL</p>
+                                            <p>Ricardo Anaya Cortés</p>
+                                        </div>
+                                        <div class="partido2">
+                                            <img src="/static/img/PAN_logo_(Mexico).svg.png" alt="">
+                                        </div>
+                                    </div>
+
+                                    <div class="boton_confirmar_voto">
+                                        <button type="button" class="boton_modal boton_color" onclick="enviarVoto('PARTIDO ACCION NACIONAL')">ENVIAR VOTO</button>
+                                        <button type="button" class="boton_modal cancelar" data-modal="modalPAN">CANCELAR</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Opción 2: Partido Revolucionario Institucional -->
+                    <div class="opcion">
+                        <div class="imagenes">
+                            <img src="/static/img/PRI_logo_(Mexico).svg.png" alt="">
+                        </div>
+                        <div class="nombre_voto">
+                            <p>PARTIDO REVOLUCIONARIO INSTITUCIONAL</p>
+                            <button type="button" class="seleccionado" id="btnPRI">
+                                <p>José Antonio Meade Kuribreña</p>
+                                <img src="/static/img/xRoja.webp" alt="">
+                            </button>
+
+                            <!-- Modal para PRI -->
+                            <div id="modalPRI" class="modal">
+                                <div class="modal-content">
+                                    <div class="nav_confirmar_voto">
+                                        <span class="close" data-modal="modalPRI">x</span>
+                                        <h2>Confirmar Voto</h2>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="texto_confirmar_voto">
+                                        <div class="partido2">
+                                            <p class="tamano">Estas votando por: </p><br>
+                                            <p class="colo">PARTIDO REVOLUCIONARIO INSTITUCIONAL</p>
+                                            <p>José Antonio Meade Kuribreña</p>
+                                        </div>
+                                        <div class="partido2">
+                                            <img src="/static/img/PRI_logo_(Mexico).svg.png" alt="">
+                                        </div>
+                                    </div>
+
+                                    <div class="boton_confirmar_voto">
+                                        <button type="button" class="boton_modal boton_color" onclick="enviarVoto('PARTIDO REVOLUCIONARIO INSTITUCIONAL')">ENVIAR VOTO</button>
+                                        <button type="button" class="boton_modal cancelar" data-modal="modalPRI">CANCELAR</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Opción 3: Partido de la Revolución Democrática -->
+                    <div class="opcion">
+                        <div class="imagenes">
+                            <img src="/static/img/PRD_logo_(Mexico).svg.png" alt="">
+                        </div>
+                        <div class="nombre_voto">
+                            <p>PARTIDO DE LA REVOLUCION DEMOCRATICA</p>
+                            <button type="button" class="seleccionado" id="btnPRD">
+                                <p>Alejandra Barrales Magdaleno</p>
+                                <img src="/static/img/xRoja.webp" alt="">
+                            </button>
+
+                            <!-- Modal para PRD -->
+                            <div id="modalPRD" class="modal">
+                                <div class="modal-content">
+                                    <div class="nav_confirmar_voto">
+                                        <span class="close" data-modal="modalPRD">x</span>
+                                        <h2>Confirmar Voto</h2>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="texto_confirmar_voto">
+                                        <div class="partido2">
+                                            <p class="tamano">Estas votando por: </p><br>
+                                            <p class="colo">PARTIDO DE LA REVOLUCION DEMOCRATICA</p>
+                                            <p>Alejandra Barrales Magdaleno</p>
+
+                                        </div>
+                                        <div class="partido2">
+                                            <img src="/static/img/PRD_logo_(Mexico).svg.png" alt="">
+                                        </div>
+                                    </div>
+
+                                    <div class="boton_confirmar_voto">
+                                        <button type="button" class="boton_modal boton_color" onclick="enviarVoto('PARTIDO DE LA REVOLUCION DEMOCRATICA')">ENVIAR VOTO</button>
+                                        <button type="button" class="boton_modal cancelar" data-modal="modalPRD">CANCELAR</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Opción 4: Partido Verde Ecologista -->
+                    <div class="opcion">
+                        <div class="imagenes">
+                            <img src="/static/img/Logo_Partido_Verde_(México).svg.png" alt="">
+                        </div>
+                        <div class="nombre_voto">
+                            <p>PARTIDO VERDE ECOLOGISTA DE MEXICO</p>
+                            <button type="button" class="seleccionado" id="btnPVEM">
+                                <p>Manuel Velasco Coello</p>
+                                <img src="/static/img/xRoja.webp" alt="">
+                            </button>
+
+                            <!-- Modal para PVEM -->
+                            <div id="modalPVEM" class="modal">
+                                <div class="modal-content">
+                                    <div class="nav_confirmar_voto">
+                                        <span class="close" data-modal="modalPVEM">x</span>
+                                        <h2>Confirmar Voto</h2>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="texto_confirmar_voto">
+                                        <div class="partido2">
+                                            <p class="tamano">Estas votando por: </p><br>
+                                            <p class="colo">PARTIDO VERDE ECOLOGISTA DE MEXICO</p>
+                                            <p>Manuel Velasco Coello</p>
+
+                                        </div>
+                                        <div class="partido2">
+                                            <img src="/static/img/Logo_Partido_Verde_(México).svg.png" alt="">
+                                        </div>
+                                    </div>
+
+                                    <div class="boton_confirmar_voto">
+                                        <button type="button" class="boton_modal boton_color" onclick="enviarVoto('PARTIDO VERDE ECOLOGISTA DE MEXICO')">ENVIAR VOTO</button>
+                                        <button type="button" class="boton_modal cancelar" data-modal="modalPVEM">CANCELAR</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Opción 5: Partido del Trabajo -->
+                    <div class="opcion">
+                        <div class="imagenes">
+                            <img src="/static/img/Worker's_Party_logo_(Mexico).svg.png" alt="">
+                        </div>
+                        <div class="nombre_voto">
+                            <p>PARTIDO DEL TRABAJO</p>
+                            <button type="button" class="seleccionado" id="btnPT">
+                                <p>Gerardo Fernández Noroña</p>
+                                <img src="/static/img/xRoja.webp" alt="">
+                            </button>
+
+                            <!-- Modal para PT -->
+                            <div id="modalPT" class="modal">
+                                <div class="modal-content">
+                                    <div class="nav_confirmar_voto">
+                                        <span class="close" data-modal="modalPT">x</span>
+                                        <h2>Confirmar Voto</h2>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="texto_confirmar_voto">
+                                        <div class="partido2">
+                                            <p class="tamano">Estas votando por: </p><br>
+                                            <p class="colo">PARTIDO DEL TRABAJO</p>
+                                            <p>Gerardo Fernández Noroña</p>
+                                        </div>
+                                        <div class="partido2">
+                                            <img src="/static/img/Worker's_Party_logo_(Mexico).svg.png" alt="">
+                                        </div>
+                                    </div>
+
+                                    <div class="boton_confirmar_voto">
+                                        <button type="button" class="boton_modal boton_color" onclick="enviarVoto('PARTIDO DEL TRABAJO')">ENVIAR VOTO</button>
+                                        <button type="button" class="boton_modal cancelar" data-modal="modalPT">CANCELAR</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Opción 6: Movimiento Ciudadano -->
+                    <div class="opcion">
+                        <div class="imagenes">
+                            <img src="/static/img/Logo_Partido_Movimiento_Ciudadano_(México).svg.png" alt="">
+                        </div>
+                        <div class="nombre_voto">
+                            <p>MOVIMIENTO CIUDADANO</p>
+                            <button type="button" class="seleccionado" id="btnMC">
+                                <p>Jorge Álvarez Máynez</p>
+                                <img src="/static/img/xRoja.webp" alt="">
+                            </button>
+
+                            <!-- Modal para MC -->
+                            <div id="modalMC" class="modal">
+                                <div class="modal-content">
+                                    <div class="nav_confirmar_voto">
+                                        <span class="close" data-modal="modalMC">x</span>
+                                        <h2>Confirmar Voto</h2>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="texto_confirmar_voto">
+                                        <div class="partido2">
+                                            <p class="tamano">Estas votando por: </p><br>
+                                            <p class="colo">MOVIMIENTO CIUDADANO</p>
+                                            <p>Jorge Álvarez Máynez</p>
+                                        </div>
+                                        <div class="partido2">
+                                            <img src="/static/img/Logo_Partido_Movimiento_Ciudadano_(México).svg.png" alt="">
+                                        </div>
+                                    </div>
+
+                                    <div class="boton_confirmar_voto">
+                                        <button type="button" class="boton_modal boton_color" onclick="enviarVoto('MOVIMIENTO CIUDADANO')">ENVIAR VOTO</button>
+                                        <button type="button" class="boton_modal cancelar" data-modal="modalMC">CANCELAR</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Opción 7: MORENA -->
+                    <div class="opcion">
+                        <div class="imagenes">
+                            <img src="/static/img/Morena_logo_(Mexico).svg.png" alt="">
+                        </div>
+                        <div class="nombre_voto">
+                            <p>MORENA</p>
+                            <button type="button" class="seleccionado" id="btnMorena">
+                                <p>Claudia Sheinbaum Pardo</p>
+                                <img src="/static/img/xRoja.webp" alt="">
+                            </button>
+
+                            <!-- Modal para MORENA -->
+                            <div id="modalMorena" class="modal">
+                                <div class="modal-content">
+                                    <div class="nav_confirmar_voto">
+                                        <span class="close" data-modal="modalMorena">x</span>
+                                        <h2>Confirmar Voto</h2>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="texto_confirmar_voto">
+                                        <div class="partido2">
+                                            <p class="tamano">Estas votando por: </p><br>
+                                            <p class="colo">MORENA</p>
+                                            <p>Claudia Sheinbaum Pardo</p>
+                                        </div>
+                                        <div class="partido2">
+                                            <img src="/static/img/Morena_logo_(Mexico).svg.png" alt="">
+                                        </div>
+                                    </div>
+
+                                    <div class="boton_confirmar_voto">
+                                        <button type="button" class="boton_modal boton_color" onclick="enviarVoto('MORENA')">ENVIAR VOTO</button>
+                                        <button type="button" class="boton_modal cancelar" data-modal="modalMorena">CANCELAR</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+            <div id="feedbackArea" class="feedback-message">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const botones = document.querySelectorAll(".seleccionado");
+            const modals = document.querySelectorAll(".modal");
+            const closes = document.querySelectorAll(".close");
+            const cancels = document.querySelectorAll(".cancelar");
+
+            botones.forEach(boton => {
+                const imagen = boton.querySelector("img");
+                if(imagen) imagen.style.display = "none";
+            });
+
+            botones.forEach(boton => {
+                boton.addEventListener("click", function () {
+                    botones.forEach(b => {
+                        b.classList.remove("activo");
+                        const img = b.querySelector("img");
+                        if(img) img.style.display = "none";
+                    });
+                    this.classList.add("activo");
+                    const img = this.querySelector("img");
+                    if(img) img.style.display = "block";
+                    const modalId = "modal" + boton.id.replace("btn", "");
+                    const modal = document.getElementById(modalId);
+                    if(modal) modal.style.display = "block";
+                });
+            });
+
+            [...closes, ...cancels].forEach(button => {
+                button.addEventListener("click", function () {
+                    const modalId = this.getAttribute("data-modal");
+                    const modal = document.getElementById(modalId);
+                    if(modal) modal.style.display = "none";
+                    // Desmarcar botón asociado
+                    const botonId = modalId.replace("modal", "btn");
+                    const botonAsociado = document.getElementById(botonId);
+                    if(botonAsociado) {
+                        botonAsociado.classList.remove("activo");
+                        const img = botonAsociado.querySelector("img");
+                        if(img) img.style.display = "none";
+                    }
+                });
+            });
+
+            window.onclick = function(event) {
+                modals.forEach(modal => {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                        const botonId = modal.id.replace("modal", "btn");
+                        const botonAsociado = document.getElementById(botonId);
+                         if(botonAsociado) {
+                            botonAsociado.classList.remove("activo");
+                            const img = botonAsociado.querySelector("img");
+                            if(img) img.style.display = "none";
+                        }
+                    }
+                });
+            }
+        });
+
+ 
+        const candidatosPorPartido = {
+            "PARTIDO ACCION NACIONAL": "Ricardo Anaya Cortés",
+            "PARTIDO REVOLUCIONARIO INSTITUCIONAL": "José Antonio Meade Kuribreña",
+            "PARTIDO DE LA REVOLUCION DEMOCRATICA": "Alejandra Barrales Magdaleno",
+            "PARTIDO VERDE ECOLOGISTA DE MEXICO": "Manuel Velasco Coello",
+            "PARTIDO DEL TRABAJO": "Gerardo Fernández Noroña",
+            "MOVIMIENTO CIUDADANO": "Jorge Álvarez Máynez",
+            "MORENA": "Claudia Sheinbaum Pardo",
+        };
+
+        async function enviarVoto(partidoSeleccionado) {
+            console.log("Iniciando envío para: " + partidoSeleccionado);
+            const feedbackDiv = document.getElementById('feedbackArea');
+            if (!feedbackDiv) {
+                console.error("Error Crítico: Falta #feedbackArea.");
+                alert("Error de interfaz.");
+                return;
+            }
+            feedbackDiv.textContent = "Procesando voto...";
+            feedbackDiv.className = 'feedback-message feedback-info';
+
+            const tokenInput = document.getElementById('token');
+            if (!tokenInput || !tokenInput.value) {
+                feedbackDiv.textContent = "Error Crítico: Token no encontrado.";
+                feedbackDiv.className = 'feedback-message feedback-error';
+                console.error("Error: Falta #token.");
+                const activeModal = document.querySelector('.modal[style*="block"]');
+                if(activeModal) activeModal.style.display = 'none';
+                return;
+            }
+            const tokenValue = tokenInput.value;
+
+         
+            const tipoEleccion = "PRESIDENCIA";
+            const candidatoSeleccionado = candidatosPorPartido[partidoSeleccionado] || "Candidato No Registrado";
+
+            const externalApiUrl = 'http://127.0.0.1:8000/api/submit-form';
+            const confirmationApiUrl = 'http://127.0.0.1:8000/api/confirm-vote';
+
+            const externalPayload = {
+                token: tokenValue,
+                tipo_eleccion: tipoEleccion,
+                partido_votado: partidoSeleccionado,
+                candidato_votado: candidatoSeleccionado
+            };
+
+            const confirmationPayload = {
+                token: tokenValue
+            };
+
+            try {
+                feedbackDiv.textContent = "Enviando voto al sistema...";
+                console.log("Enviando a API externa (simulada):", externalApiUrl, externalPayload);
+                const externalResponse = await fetch(externalApiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(externalPayload) });
+                const externalResult = await externalResponse.json();
+                if (!externalResponse.ok) throw new Error(externalResult.error || `Error ${externalResponse.status} externo.`);
+                console.log("Respuesta externa (prueba):", externalResult.message);
+
+                feedbackDiv.textContent = "Confirmando registro...";
+                console.log("Enviando a API de confirmación interna:", confirmationApiUrl, confirmationPayload);
+                const confirmationResponse = await fetch(confirmationApiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(confirmationPayload) });
+                const confirmationResult = await confirmationResponse.json();
+                if (!confirmationResponse.ok) throw new Error(confirmationResult.error || `Error ${confirmationResponse.status} interno.`);
+
+                console.log("Respuesta confirmación interna:", confirmationResult.message);
+                feedbackDiv.textContent = `¡Voto Exitoso! ${confirmationResult.message || 'Registro completado.'}`;
+                feedbackDiv.className = 'feedback-message feedback-success';
+
+            } catch (error) {
+                console.error("Error durante el envío del voto:", error);
+                feedbackDiv.textContent = `Error al procesar el voto: ${error.message}`;
+                feedbackDiv.className = 'feedback-message feedback-error';
+            } finally {
+                 const activeModal = document.querySelector('.modal[style*="block"]');
+                 if (activeModal) {
+                     activeModal.style.display = 'none';
+                     const botonId = activeModal.id.replace("modal", "btn");
+                     const botonAsociado = document.getElementById(botonId);
+                     if(botonAsociado) {
+                         botonAsociado.classList.remove("activo");
+                         const img = botonAsociado.querySelector("img");
+                         if(img) img.style.display = "none";
+                     }
+                 }
+            }
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,661 @@
+<html class="js svg dj_webkit dj_chrome dj_contentbox wf-opensans-i3-active wf-opensans-i4-active wf-opensans-n4-active wf-opensans-n6-active wf-opensans-n3-active wf-opensans-n7-active wf-active"><head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="PRAGMA" content="NO-CACHE">
+		<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+		<title>Registro Nacional de Profesionistas</title>
+		<link rel="shortcut icon" href="/cedula/img/favicon.ico" type="image/png">	
+		
+		
+		
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js" type="text/javascript" async=""></script><script async="" src="//www.google-analytics.com/analytics.js"></script><script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script><script src="https://framework-gb.cdn.gob.mx/assets/scripts/plugins.js"></script><script src="https://framework-gb.cdn.gob.mx/assets/scripts/main.js"></script><script type="text/javascript" charset="UTF-8">
+			var isDownload = false;
+				djConfig = {
+					isDebug: false,
+					parseOnLoad: true,	
+					locale: "es",					               
+					modulePaths: {
+						"custom": "../custom",
+						"util": "../../../util"
+						},
+					xdWaitSeconds: 10
+				};
+		</script>
+		
+		
+		
+		<script src="/cedula/js/dojo/1.5/dojo/dojo.js" type="text/javascript" charset="UTF-8"></script>	
+		<link href="/cedula/js/dojo/1.5/dijit/themes/nihilo/dojo_nihilo.css" rel="stylesheet" type="text/css" charset="UTF-8">
+		<link href="/cedula/js/dojo/1.5/dojox/grid/resources/nihiloGrid.css" rel="stylesheet" type="text/css" charset="UTF-8">
+		
+		
+		<script src="/cedula/js/presidencia/consulta-cedula.js" type="text/javascript" charset="UTF-8"></script>	
+		<script src="/cedula/js/presidencia/terminos.js" type="text/javascript" charset="UTF-8"></script>
+	
+		<script src="https://framework-gb.cdn.gob.mx/gobmx.js"></script><script type="text/javascript" src="https://framework-gb.cdn.gob.mx/assets/scripts/vendor/modernizr.js"></script><script type="text/javascript" src="https://framework-gb.cdn.gob.mx/assets/scripts/vendor/pace.min.js"></script><script type="text/javascript" src="https://framework-gb.cdn.gob.mx/assets/scripts/vendor/analitycs.js"></script>
+		<link href="https://framework-gb.cdn.gob.mx/assets/styles/main.css" rel="stylesheet">
+		<link href="/cedula/css/gobmx.css" rel="stylesheet" type="text/css" charset="ISO-8859-1">
+		<link href="/cedula/css/gobmxGrid.css" rel="stylesheet" type="text/css" charset="ISO-8859-1">
+	
+	
+		<script type="text/javascript"> 
+ 			var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+ 			document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+ 		</script><script src="https://ssl.google-analytics.com/ga.js" type="text/javascript"></script>
+		<script type="text/javascript"> 
+			try {
+ 				var pageTracker = _gat._getTracker("UA-20056227-1");
+ 				pageTracker._trackPageview("Pagina Principal Busqueda Avanzada");
+ 			} catch(err) {}
+	 	</script>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300,600,700&amp;subset=latin" media="all"><script type="text/javascript" charset="UTF-8">
+			dojo.require("dojo.parser");	
+	    	dojo.require("custom.PageTable");    
+	    	dojo.require("custom.MyDialog");	
+	    	dojo.require( "util.common");
+	    	dojo.require("custom.jmessages");
+			dojo.require("dojox.grid.DataGrid");
+			dojo.require("dijit.form.Form");
+			dojo.require("dijit.layout.TabContainer");
+			dojo.require("dijit.layout.ContentPane");
+			dojo.require("dojo.data.ItemFileReadStore"); 
+			dojo.require("dijit.form.ValidationTextBox");
+			dojo.require("dojo.data.ItemFileWriteStore");
+			dojo.require("dijit.form.TextBox");
+			dojo.require("dijit.form.Button");
+			dojo.require("dijit.form.FilteringSelect");		
+			dojo.require("dijit.form.CheckBox");
+			dojo.require("dijit.Tooltip");
+			
+			
+			var messagesJS = { context:"/cedula/", allWidgets:[], fieldCedula:[], fieldGenerales:[], fieldExtra:[] };
+	
+	
+			var exportLayout = [ {cells: [
+					{ name: 'Cédula', field: 'idCedula', width: 'auto' },
+					{ name: 'Nombre', field: 'nombre', width: 'auto'},
+					{ name: 'Primer apellido', field: 'paterno', width: 'auto'},
+					{ name: 'Segundo apellido', field: 'materno', width: 'auto'},
+					{ name: 'Género', field: 'sexo', width: 'auto'},
+					{ name: 'Profesión', field: 'titulo', width: 'auto'},
+					{ name: 'Año de expedición', field: 'anioreg', width: 'auto'},
+					{ name: 'Institución', field: 'desins', width: 'auto'},
+					{ name: 'Tipo', field: 'tipo', width: 'auto'}
+				] } ];
+			
+	
+			
+		
+			var storeAnnio = new dojo.data.ItemFileWriteStore({data: {identifier: 'name', items:[]}});
+			storeAnnio.newItem( { name: '', id:'' } );
+			
+			var templateFilter = {desc: "página # de #" };
+			var storeGenero = new dojo.data.ItemFileWriteStore({data: {identifier: 'name', items:[]}});
+			storeGenero.newItem( { name: '', id:'' } );
+			storeGenero.newItem( { name: 'HOMBRE', id:'1' } );
+			storeGenero.newItem( { name: 'MUJER', id:'2' } );		
+			var _connections = [];
+			var _instituciones ={todas:"TODAS"};
+			var _genero = { hombre:'HOMBRE', mujer: 'MUJER'};
+			var messages={ limite: "El resultado de la b&uacute;squeda contiene m&aacute;s de 1000 registros.", context:"/cedula/", first: '' };
+
+			
+	        
+	        
+	       
+	        function goContacto(){
+	        	window.location.href = messages.context+"presidencia/contacto.action";        	
+	        }
+	        function goMaterialApoyo(){
+	        	window.location.href = messages.context+"presidencia/apoyo.action";
+	        }
+	        function goPreguntasFrecuentes(){
+	        	window.location.href = "http://www.sep.gob.mx/es/sep1/Preguntas__Frecuentes";
+	        }
+	        
+	        function findGenerales(){
+	        	dojo.style('tableGenerales','display','block');
+	        	dojo.style('tableCedula','display','none');
+	        	dijit.byId( 'mainContainer' ).selectChild( "tab1" );
+	        	clearSearch();
+	        	
+	        }
+	        
+	        function clearSearch(){
+	        	if( dijit.byId( 'cedulasGrid' ) ) {
+	 				dijit.byId( 'cedulasGrid' ).destroy(true);
+	 			}   
+	        	
+	        	dojo.byId("detalleCedula").innerHTML = '';            
+	            
+	            dojo.byId("detalleNombre").innerHTML = '';
+	            
+	            dojo.byId("detalleGenero").innerHTML = '';
+	                              
+	            dojo.byId("detalleProfesion").innerHTML ='';
+	            dojo.byId("detalleFecha").innerHTML ='';
+	            dojo.byId("detalleInstitucion").innerHTML ='';
+	            dojo.byId("detalleTipo").innerHTML = '';
+	            dijit.byId('buscaCedulaJson').reset();
+	        }
+	        
+	        function goCorrecionCedula(){
+	        	window.location.href = messagesJS.context+"presidencia/correccionDatos.action";
+	        }
+	        function bienvenida(){
+	        	window.location.href = messagesJS.context+"presidencia/bienvenida.action";
+	        }
+	        
+	        function terminos(){
+	        	window.location.href = messagesJS.context+"presidencia/terminos.action";
+	        }
+	        
+	        function consejos(){
+	        	window.location.href = messagesJS.context+"presidencia/consejos.action";
+	        }
+	        
+	        function titulosElectronicos(){
+	        	window.location.href = messagesJS.context+"presidencia/titulosElectronicos.action";
+	        }
+	        
+	        function findBasica(){
+	        	dojo.style('tableGenerales','display','none');
+	        	dojo.style('tableCedula','display','block');
+	        	dijit.byId( 'mainContainer' ).selectChild( "tab1" );
+	        	clearSearch();
+	        }	        
+	       
+		</script></head><body class="nihilo  pace-done"><header><nav class="navbar navbar-inverse navbar-fixed-top" role="navigation"><div class="container"><div class="navbar-header"><button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarMainCollapse"><span class="sr-only">Interruptor de Navegación</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand" href="https://www.gob.mx/"><img src="https://framework-gb.cdn.gob.mx/gobmx/img/logo_blanco.svg" width="128" height="48" alt="PÃƒÂ¡gina de inicio, Gobierno de MÃƒÂ©xico"></a></div><div class="collapse navbar-collapse" id="navbarMainCollapse"><ul class="nav navbar-nav navbar-right"><li><a href="https://www.gob.mx/tramites">Trámites</a></li><li><a href="https://www.gob.mx/gobierno">Gobierno</a></li><li><a href="https://www.gob.mx/busqueda"><span class="sr-only">Búsqueda</span><i class="icon-search"></i></a></li></ul></div></div></nav></header><div class="pace  pace-inactive"><div class="pace-progress" data-progress-text="100%" data-progress="99" style="transform: translate3d(100%, 0px, 0px);">
+  <div class="pace-progress-inner"></div>
+</div>
+<div class="pace-activity"></div></div><textarea id="dijit._editor.RichText.savedContent" style="display:none;position:absolute;top:-100px;left:-100px;height:3px;width:3px;overflow:hidden;"></textarea>
+	
+	
+	
+		
+			
+		
+		<div style="display:none">
+			1.00-b95 | 2025-02-26 20:27:02 | PedroFloresLÂ¢pez &nbsp;&nbsp;&nbsp;&nbsp;
+		</div>
+	
+		<main role="main">
+			<nav class="navbar navbar-inverse sub-navbar navbar-fixed-top">
+				<div class="container">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#subenlaces">
+							<span class="sr-only">Interruptor de Navegación</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="/">SEP</a>
+						</div>
+						<div class="collapse navbar-collapse" id="subenlaces">
+						<ul class="nav navbar-nav navbar-right">
+							<li class="dropdown">
+					          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Inicio<span class="caret"></span></a>
+					          <ul class="dropdown-menu" role="menu">
+					            <li><a href="javascript:bienvenida();">Bienvenida</a></li>
+					            <li><a href="javascript:terminos();">Términos y condiciones</a></li>
+					            <li><a href="javascript:consejos();">Consejos para una mejor búsqueda</a></li>
+					            
+					          </ul>
+					        </li>
+					        <li class="dropdown">
+					          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Búsqueda<span class="caret"></span></a>
+					          <ul class="dropdown-menu" role="menu">
+					            <li><a href="javascript:findGenerales();">Detallada</a></li>
+					            <li><a href="javascript:findBasica();">Cédula</a></li>
+					            
+					            
+					          </ul>
+					        </li>
+					        
+							<li><a href="javascript:titulosElectronicos();">Datos Abiertos</a></li>
+							<li><a href="javascript:goPreguntasFrecuentes();">Preguntas frecuentes</a></li>
+							<li><a href="javascript:goMaterialApoyo();">Video de ayuda</a></li>
+							<li><a href="javascript:goContacto();">Contacto</a></li>					
+						</ul>
+					</div>
+				</div>
+			</nav>
+	        <div class="container top-buffer-submenu">
+	        	<br>
+				<div class="row">
+					<div class="col-sm-8" id="breadcrumb_rnp">
+						<ol class="breadcrumb">
+							<li><a href="https://www.gob.mx/"><i class="icon icon-home"></i></a></li>
+							<li><a href="http://www.gob.mx/sep">Inicio</a></li>
+							<li class="active">Cédula Profesional</li>
+						</ol>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-8">
+	          	        <h2>Registro Nacional de Profesionistas</h2>
+	          	        <h3>Consulta de cédulas profesionales</h3>
+	          	        <hr class="red">
+	          	        <p align="justify">Este  apartado tiene como propósito ampliar los criterios de búsqueda de  profesionistas que registran sus títulos y cuentan con cédula profesional con  efectos de patente; esto delimita la responsabilidad del Registro Nacional  de Profesionistas,  al definirla  como  la única instancia válida para hacer uso de esta información.</p>
+						<p align="justify">La  información publicada en este sitio, de acuerdo a los criterios ordenados por  el Instituto  Nacional de Transparencia&nbsp; Acceso a la  Información y Protección de Datos Personales (INAI), es de  carácter público y  constantemente se  actualiza; esto determina que la Secretaría de Educación Pública (SEP) se  deslinde y no sea  responsable del  uso, adecuaciones y modalidades de la información que pudieran aparecer en  otros sitios web.
+	               	</p></div>
+	           	</div>
+	           	<div class="row">
+	           		<div class="col-sm-12">
+	           			<div class="alert alert-danger" tabindex="0" id="divD" style="display: none;">
+							<strong>¡Error de Registro! </strong>
+							<span id="lblD">Alguna validación no cumple o no has llenado los campos requeridos. Por favor verifica.</span>
+						</div>
+					</div>	
+	           	</div>
+	           	
+				<div class="bottom-buffer">
+					<form dojoattachpoint="containerNode" dojoattachevent="onreset:_onReset,onsubmit:_onSubmit" name="buscaCedulaJson" method="post" id="buscaCedulaJson" dir="ltr" widgetid="buscaCedulaJson">
+						<input id="maxResult" name="maxResult" type="hidden" value="1000">
+						<div class="dijitTabContainer dijitContainer dijitTabContainerTop dijitLayoutContainer dijitTabContainerNoLayout tabStrip-disabled" id="mainContainer" dir="ltr" widgetid="mainContainer">
+	<div class="dijitTabListContainer-top tabStrip-disabled dijitLayoutContainer" style="visibility: visible; width: 720px; height: 44px;" id="mainContainer_tablist" dir="ltr" lang="" widgetid="mainContainer_tablist" role="tablist">
+	<div dojoattachevent="onclick:_onButtonClick" dir="ltr" lang="" class="tabStripButton-top dijitTab tabStripButton dijitAlignRight" widgetid="mainContainer_tablist_menuBtn" _dijitmenumaincontainer_tablist_menu="1" style="display: none; inset: 0px auto auto 720px; height: 42px;">
+	<div wairole="presentation" class="dijitTabInnerDiv" dojoattachpoint="innerDiv,focusNode" role="presentation" id="mainContainer_tablist_menuBtn" tabindex="-1">
+		<div wairole="presentation" class="dijitTabContent dijitButtonContents" dojoattachpoint="tabContent" role="presentation">
+			<img wairole="presentation" alt="" src="/cedula/js/dojo/1.5/dojo/resources/blank.gif" class="dijitTabStripIcon dijitTabStripMenuIcon" dojoattachpoint="iconNode" role="presentation">
+			<span dojoattachpoint="containerNode,titleNode" class="dijitButtonText dijitDisplayNone" title="▼">▼</span>
+		</div>
+	</div>
+</div>
+	<div dojoattachevent="onclick:_onButtonClick" dir="ltr" lang="" class="tabStripButton-top dijitAlignLeft dijitTab tabStripButton dijitTabDisabled tabStripButtonDisabled dijitDisabled" widgetid="mainContainer_tablist_leftBtn" style="display: none; inset: 0px auto auto 0px; height: 42px;">
+	<div wairole="presentation" class="dijitTabInnerDiv" dojoattachpoint="innerDiv,focusNode" role="presentation" id="mainContainer_tablist_leftBtn" tabindex="-1" aria-disabled="true">
+		<div wairole="presentation" class="dijitTabContent dijitButtonContents" dojoattachpoint="tabContent" role="presentation">
+			<img wairole="presentation" alt="" src="/cedula/js/dojo/1.5/dojo/resources/blank.gif" class="dijitTabStripIcon dijitTabStripSlideLeftIcon" dojoattachpoint="iconNode" role="presentation">
+			<span dojoattachpoint="containerNode,titleNode" class="dijitButtonText dijitDisplayNone" title="◀">◀</span>
+		</div>
+	</div>
+</div>
+	<div dojoattachevent="onclick:_onButtonClick" dir="ltr" lang="" class="tabStripButton-top dijitAlignRight dijitTab tabStripButton dijitTabDisabled tabStripButtonDisabled dijitDisabled" widgetid="mainContainer_tablist_rightBtn" style="display: none; inset: 0px auto auto 720px; height: 42px;">
+	<div wairole="presentation" class="dijitTabInnerDiv" dojoattachpoint="innerDiv,focusNode" role="presentation" id="mainContainer_tablist_rightBtn" tabindex="-1" aria-disabled="true">
+		<div wairole="presentation" class="dijitTabContent dijitButtonContents" dojoattachpoint="tabContent" role="presentation">
+			<img wairole="presentation" alt="" src="/cedula/js/dojo/1.5/dojo/resources/blank.gif" class="dijitTabStripIcon dijitTabStripSlideRightIcon" dojoattachpoint="iconNode" role="presentation">
+			<span dojoattachpoint="containerNode,titleNode" class="dijitButtonText dijitDisplayNone" title="▶">▶</span>
+		</div>
+	</div>
+</div>
+	<div class="dijitTabListWrapper dijitTabContainerTopNone dijitAlignClient" dojoattachpoint="tablistWrapper" style="height: 44px; inset: 0px auto auto 0px; width: 720px;">
+		<div wairole="tablist" dojoattachevent="onkeypress:onkeypress" dojoattachpoint="containerNode" class="nowrapTabStrip dijitTabContainerTop-tabs dijitTabNoLayout" role="tablist" style="width: 50600px;"><div wairole="presentation" dojoattachpoint="titleNode" dojoattachevent="onclick:onClick" role="presentation" dir="ltr" lang="" widgetid="mainContainer_tablist_tab1" class="dijitTab">
+    <div wairole="presentation" class="dijitTabInnerDiv" dojoattachpoint="innerDiv" role="presentation">
+        <div wairole="presentation" class="dijitTabContent" dojoattachpoint="tabContent" role="presentation">
+        	<div wairole="presentation" dojoattachpoint="focusNode" role="tab" id="mainContainer_tablist_tab1" tabindex="-1" title="" aria-selected="false" aria-pressed="false">
+		        <img src="/cedula/js/dojo/1.5/dojo/resources/blank.gif" alt="" class="dijitIcon dijitTabButtonIcon" dojoattachpoint="iconNode">
+		        <span dojoattachpoint="containerNode" class="tabLabel">Búsqueda</span>
+		        <span class="dijitInline dijitTabCloseButton dijitTabCloseIcon" dojoattachpoint="closeNode" dojoattachevent="onclick: onClickCloseButton" wairole="presentation" role="presentation" style="display: none;">
+		            <span dojoattachpoint="closeText" class="dijitTabCloseText">x</span></span>
+			</div>
+        </div>
+    </div>
+</div><div wairole="presentation" dojoattachpoint="titleNode" dojoattachevent="onclick:onClick" role="presentation" dir="ltr" lang="" widgetid="mainContainer_tablist_tab2" class="dijitTab">
+    <div wairole="presentation" class="dijitTabInnerDiv" dojoattachpoint="innerDiv" role="presentation">
+        <div wairole="presentation" class="dijitTabContent" dojoattachpoint="tabContent" role="presentation">
+        	<div wairole="presentation" dojoattachpoint="focusNode" role="tab" id="mainContainer_tablist_tab2" tabindex="-1" title="" aria-selected="false" aria-pressed="false">
+		        <img src="/cedula/js/dojo/1.5/dojo/resources/blank.gif" alt="" class="dijitIcon dijitTabButtonIcon" dojoattachpoint="iconNode">
+		        <span dojoattachpoint="containerNode" class="tabLabel">Resultados</span>
+		        <span class="dijitInline dijitTabCloseButton dijitTabCloseIcon" dojoattachpoint="closeNode" dojoattachevent="onclick: onClickCloseButton" wairole="presentation" role="presentation" style="display: none;">
+		            <span dojoattachpoint="closeText" class="dijitTabCloseText">x</span></span>
+			</div>
+        </div>
+    </div>
+</div><div wairole="presentation" dojoattachpoint="titleNode" dojoattachevent="onclick:onClick" role="presentation" dir="ltr" lang="" widgetid="mainContainer_tablist_tab3" class="dijitTab dijitTabChecked dijitChecked">
+    <div wairole="presentation" class="dijitTabInnerDiv" dojoattachpoint="innerDiv" role="presentation">
+        <div wairole="presentation" class="dijitTabContent" dojoattachpoint="tabContent" role="presentation">
+        	<div wairole="presentation" dojoattachpoint="focusNode" role="tab" id="mainContainer_tablist_tab3" tabindex="0" title="" aria-selected="true" aria-pressed="true">
+		        <img src="/cedula/js/dojo/1.5/dojo/resources/blank.gif" alt="" class="dijitIcon dijitTabButtonIcon" dojoattachpoint="iconNode">
+		        <span dojoattachpoint="containerNode" class="tabLabel">Detalle</span>
+		        <span class="dijitInline dijitTabCloseButton dijitTabCloseIcon" dojoattachpoint="closeNode" dojoattachevent="onclick: onClickCloseButton" wairole="presentation" role="presentation" style="display: none;">
+		            <span dojoattachpoint="closeText" class="dijitTabCloseText">x</span></span>
+			</div>
+        </div>
+    </div>
+</div></div>
+	</div>
+</div>
+	<div dojoattachpoint="tablistSpacer" class="dijitTabSpacer dijitTabContainerTop-spacer"></div>
+	<div class="dijitTabPaneWrapper dijitTabContainerTop-container" dojoattachpoint="containerNode" role="tabpanel" aria-labelledby="mainContainer_tablist_tab3">
+			                <div dojotype="dijit.layout.ContentPane" title="" selected="true" id="tab1" style="display: none; min-height: 150px;" dir="ltr" widgetid="tab1" role="group" class="dijitContentPane dijitTabPane dijitTabContainerTop-child dijitTabContainerTop-dijitContentPane dijitHidden"> 
+			                	<div class="row">
+									<div class="col-md-12">            	        	        
+										<h3>Datos de consulta</h3>
+										<hr class="red">                        	
+									</div>
+								</div>
+			                
+			                	<div id="tableGenerales" style="display:block">
+									
+
+
+
+<div class="row">
+	<div class="col-md-4">
+		<div class="form-group">
+			<label for="nombre" class="control-label">
+				Nombre(s)<span id="required_nombre" class="text-muted">*</span>:
+			</label>
+			<div class="dijit dijitReset dijitInlineTable dijitLeft dijitTextBox dijitValidationTextBox" id="widget_nombre" wairole="presentation" role="presentation" widgetid="nombre" style="font-family: Arial, Verdana, Helvetica, sans-serif; font-size: 0.7em; width: 210px;"><div class="dijitReset dijitValidationContainer"><input class="dijitReset dijitInputField dijitValidationIcon dijitValidationInner" value="Χ " type="text" tabindex="-1" readonly="" wairole="presentation" role="presentation"></div><div class="dijitReset dijitInputField dijitInputContainer"><input class="dijitReset dijitInputInner ns_" dojoattachpoint="textbox,focusNode" autocomplete="off" name="nombre" type="text" id="nombre" tabindex="0" aria-required="true" aria-invalid="false" value="" maxlength="50"><span class="dijitPlaceHolder dijitInputField" style="display: none;">Ingresar nombre(s)</span></div></div>
+			<span id="required_lbl_nombre" class="labelWithoutError">
+				Este campo es obligatorio
+			</span>			
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div for="paterno" class="form-group">
+			<label class="control-label">
+				Primer apellido<span id="required_paterno" class="text-muted">*</span>:
+			</label>
+			<div class="dijit dijitReset dijitInlineTable dijitLeft dijitTextBox dijitValidationTextBox" id="widget_paterno" wairole="presentation" role="presentation" widgetid="paterno" style="font-family: Arial, Verdana, Helvetica, sans-serif; font-size: 0.7em; width: 210px;"><div class="dijitReset dijitValidationContainer"><input class="dijitReset dijitInputField dijitValidationIcon dijitValidationInner" value="Χ " type="text" tabindex="-1" readonly="" wairole="presentation" role="presentation"></div><div class="dijitReset dijitInputField dijitInputContainer"><input class="dijitReset dijitInputInner ns_" dojoattachpoint="textbox,focusNode" autocomplete="off" name="paterno" type="text" id="paterno" tabindex="0" aria-required="true" aria-invalid="false" value="" maxlength="50"><span class="dijitPlaceHolder dijitInputField" style="display: none;">Primer apellido</span></div></div>
+			<span id="required_lbl_paterno" class="labelWithoutError">
+				Este campo es obligatorio
+			</span>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div for="materno" class="form-group">
+			<label class="control-label">
+				Segundo apellido
+			</label>		
+			<div class="dijit dijitReset dijitInlineTable dijitLeft dijitTextBox dijitValidationTextBox" id="widget_materno" wairole="presentation" role="presentation" widgetid="materno" style="font-family: Arial, Verdana, Helvetica, sans-serif; font-size: 0.7em; width: 210px;"><div class="dijitReset dijitValidationContainer"><input class="dijitReset dijitInputField dijitValidationIcon dijitValidationInner" value="Χ " type="text" tabindex="-1" readonly="" wairole="presentation" role="presentation"></div><div class="dijitReset dijitInputField dijitInputContainer"><input class="dijitReset dijitInputInner ns_" dojoattachpoint="textbox,focusNode" autocomplete="off" name="materno" type="text" id="materno" tabindex="0" aria-required="false" aria-invalid="false" value="" maxlength="50"><span class="dijitPlaceHolder dijitInputField" style="display: none;">Segundo apellido</span></div></div>
+			<span id="validation_lbl_materno" class="labelWithoutError">
+				Este campo es obligatorio
+			</span>
+		</div>		
+	</div>
+</div>
+
+
+
+<!-- 
+
+		<div class="checkbox">
+		    <label>
+				<input name="condicionesGenerales" id="condicionesGenerales"
+				dojoType="dijit.form.CheckBox"
+				
+				value="false" type="checkbox" class="checkbox"
+				onClick="showTerminos()">
+				Acepto<span id="areg_acepto" class="form-text">*</span>:
+			</label>
+	  	</div>	 -->
+	  	
+	  	
+            			
+		
+        	<div class="pull-left text-muted text-vertical-align-button">
+            	(*) Campos obligatorios
+			</div>
+		
+		<div class="pull-right text-muted text-vertical-align-button">
+			<span class="dijit dijitReset dijitInline dijitButton" dir="ltr" widgetid="dijit_form_Button_0"><span class="dijitReset dijitInline dijitButtonNode" dojoattachevent="ondijitclick:_onButtonClick"><span class="dijitReset dijitStretch dijitButtonContents" dojoattachpoint="titleNode,focusNode" wairole="button" waistate="labelledby-dijit_form_Button_0_label" role="button" aria-labelledby="dijit_form_Button_0_label" id="dijit_form_Button_0" tabindex="0"><span class="dijitReset dijitInline dijitIcon" dojoattachpoint="iconNode"></span><span class="dijitReset dijitToggleButtonIconChar">●</span><span class="dijitReset dijitInline dijitButtonText" id="dijit_form_Button_0_label" dojoattachpoint="containerNode">			
+				Consultar
+			</span></span></span><input type="button" value="" class="dijitOffScreen" dojoattachpoint="valueNode"></span>
+		</div>
+                		
+
+
+								</div>
+								<div id="tableCedula" style="display:none">
+									
+
+
+
+
+<div class="row">	
+	<div class="col-md-4">						
+		<div class="form-group">
+			<label class="control-label">
+				Número de Cédula<span id="required_idCedula" class="form-text">*</span>:								 
+			</label>
+			<div class="dijit dijitReset dijitInlineTable dijitLeft dijitTextBox dijitValidationTextBox" id="widget_idCedula" wairole="presentation" role="presentation" widgetid="idCedula" style="font-family: Arial, Verdana, Helvetica, sans-serif; font-size: 0.7em; width: 210px;"><div class="dijitReset dijitValidationContainer"><input class="dijitReset dijitInputField dijitValidationIcon dijitValidationInner" value="Χ " type="text" tabindex="-1" readonly="" wairole="presentation" role="presentation"></div><div class="dijitReset dijitInputField dijitInputContainer"><input class="dijitReset dijitInputInner ns_" dojoattachpoint="textbox,focusNode" autocomplete="off" name="idCedula" type="text" id="idCedula" tabindex="0" aria-required="true" aria-invalid="true" value="" maxlength="8"><span class="dijitPlaceHolder dijitInputField">Número de Cédula</span></div></div>
+			<span id="required_lbl_idCedula" class="labelWithoutError">
+				Este campo es obligatorio
+			</span>		
+		</div>
+	</div>
+	
+	
+							
+	
+	<div class="col-md-4">						
+		<div class="form-group">
+			<p class="text-left">
+				<br>
+				<span class="dijit dijitReset dijitInline dijitButton" dir="ltr" widgetid="dijit_form_Button_1"><span class="dijitReset dijitInline dijitButtonNode" dojoattachevent="ondijitclick:_onButtonClick"><span class="dijitReset dijitStretch dijitButtonContents" dojoattachpoint="titleNode,focusNode" wairole="button" waistate="labelledby-dijit_form_Button_1_label" role="button" aria-labelledby="dijit_form_Button_1_label" id="dijit_form_Button_1" tabindex="0"><span class="dijitReset dijitInline dijitIcon" dojoattachpoint="iconNode"></span><span class="dijitReset dijitToggleButtonIconChar">●</span><span class="dijitReset dijitInline dijitButtonText" id="dijit_form_Button_1_label" dojoattachpoint="containerNode">
+					Consultar
+				</span></span></span><input type="button" value="" class="dijitOffScreen" dojoattachpoint="valueNode"></span>
+			</p>
+		</div>
+	</div>	
+	
+</div>
+
+
+<div class="form-group">
+    <div class="col-sm-4">
+    	<div class="pull-left text-muted text-vertical-align-button">
+    		(*) Campos obligatorios			
+		</div>
+		
+		
+	</div>
+</div>
+
+               
+
+								</div>
+								
+			                </div>
+			                <div dojotype="dijit.layout.ContentPane" title="" id="tab2" style="display: none; min-height: 150px;" dir="ltr" widgetid="tab2" role="group" class="dijitContentPane dijitTabPane dijitTabContainerTop-child dijitTabContainerTop-dijitContentPane dijitHidden">
+			                	<div class="row">
+									<div class="col-md-12">            	        	        
+										<h3>Resultados de la búsqueda</h3>
+										<hr class="red">                        	
+									</div>
+								</div>	
+								<div class="row">
+									<div class="col-md-12">
+										<div id="content">
+											<table border="0" width="100%" cellpadding="0" cellspacing="0" id="cedulasGrid" widgetid="cedulasGrid">
+	<tbody><tr>
+		<td style="width:100%">
+			<div>
+			    <div hidefocus="hidefocus" wairole="grid" dojoattachevent="onmouseout:_mouseOut" role="grid" tabindex="0" aria-multiselectable="true" class="dojoxGrid" id="dojox_grid_DataGrid_0" widgetid="dojox_grid_DataGrid_0" aria-readonly="true" style="height: auto;">
+	<div class="dojoxGridMasterHeader" dojoattachpoint="viewsHeaderNode" wairole="presentation" role="presentation" style="display: block; height: 41px;"><div class="dojoxGridHeader" dojoattachpoint="headerNode" wairole="presentation" role="presentation" style="width: 707px; left: 1px; top: 0px;">
+		<div dojoattachpoint="headerNodeContainer" style="width:9000em" wairole="presentation" role="presentation">
+			<div dojoattachpoint="headerContentNode" wairole="row" role="row"><table class="dojoxGridRowTable" border="0" cellspacing="0" cellpadding="0" role="presentation" style="width: 707px;"><tbody><tr><th tabindex="-1" aria-readonly="true" role="columnheader" aria-sort="ascending" id="dojox_grid_DataGrid_0Hdr0" class="dojoxGridCell dojoDndItem " idx="0" style="width:20%;" dndtype="gridColumn_dojox_grid_DataGrid_0"><div class="dojoxGridSortNode dojoxGridSortUp"><div class="dojoxGridArrowButtonChar">▲</div><div class="dojoxGridArrowButtonNode" role="presentation"></div><div class="dojoxGridColCaption">Cédula</div></div></th><th tabindex="-1" aria-readonly="true" role="columnheader" id="dojox_grid_DataGrid_0Hdr1" class="dojoxGridCell dojoDndItem " idx="1" style="width:20%;" dndtype="gridColumn_dojox_grid_DataGrid_0"><div class="dojoxGridSortNode">Nombre</div></th><th tabindex="-1" aria-readonly="true" role="columnheader" id="dojox_grid_DataGrid_0Hdr2" class="dojoxGridCell dojoDndItem " idx="2" style="width:20%;" dndtype="gridColumn_dojox_grid_DataGrid_0"><div class="dojoxGridSortNode">Primer apellido</div></th><th tabindex="-1" aria-readonly="true" role="columnheader" id="dojox_grid_DataGrid_0Hdr3" class="dojoxGridCell dojoDndItem " idx="3" style="width:20%;" dndtype="gridColumn_dojox_grid_DataGrid_0"><div class="dojoxGridSortNode">Segundo apellido</div></th><th tabindex="-1" aria-readonly="true" role="columnheader" id="dojox_grid_DataGrid_0Hdr4" class="dojoxGridCell dojoDndItem " idx="4" style="width:20%;" dndtype="gridColumn_dojox_grid_DataGrid_0"><div class="dojoxGridSortNode">Tipo</div></th></tr></tbody></table></div>
+		</div>
+	</div></div>
+	<div class="dojoxGridMasterView" dojoattachpoint="viewsNode" wairole="presentation" role="presentation" style="height: 521px;"><div class="dojoxGridView" wairole="presentation" role="presentation" id="dojox_grid__View_1" widgetid="dojox_grid__View_1" style="width: 707px; left: 1px; top: 0px;">
+	
+	<input type="checkbox" class="dojoxGridHiddenFocus" dojoattachpoint="hiddenFocusNode" wairole="presentation" role="presentation">
+	<input type="checkbox" class="dojoxGridHiddenFocus" wairole="presentation" role="presentation">
+	<div class="dojoxGridScrollbox" dojoattachpoint="scrollboxNode" wairole="presentation" role="presentation">
+		<div class="dojoxGridContent" dojoattachpoint="contentNode" hidefocus="hidefocus" wairole="presentation" role="presentation" style="height: 521px; width: 707px;"><div role="presentation" style="position: absolute; left: 0px; top: 0px;"><div class="dojoxGridRow dojoxGridRowSelected" role="row" aria-selected="true" style=""><table class="dojoxGridRowTable" border="0" cellspacing="0" cellpadding="0" role="presentation" style="width: 707px;"><tbody><tr><td tabindex="-1" role="gridcell" class="dojoxGridCell  dojoxGridCellFocus" idx="0" style="width:20%;">1418552</td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="1" style="width:20%;">ANDRÉS MANUEL</td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="2" style="width:20%;">LÓPEZ</td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="3" style="width:20%;">OBRADOR</td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="4" style="width:20%;">C1</td></tr></tbody></table></div><div class="dojoxGridRow dojoxGridRowOdd" role="row" aria-selected="false" style=""><table class="dojoxGridRowTable" border="0" cellspacing="0" cellpadding="0" role="presentation" style="width: 707px;"><tbody><tr><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="0" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="1" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="2" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="3" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="4" style="width:20%;"><div>&nbsp;</div></td></tr></tbody></table></div><div class="dojoxGridRow" role="row" aria-selected="false" style=""><table class="dojoxGridRowTable" border="0" cellspacing="0" cellpadding="0" role="presentation" style="width: 707px;"><tbody><tr><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="0" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="1" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="2" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="3" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="4" style="width:20%;"><div>&nbsp;</div></td></tr></tbody></table></div><div class="dojoxGridRow dojoxGridRowOdd" role="row" aria-selected="false" style=""><table class="dojoxGridRowTable" border="0" cellspacing="0" cellpadding="0" role="presentation" style="width: 707px;"><tbody><tr><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="0" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="1" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="2" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="3" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="4" style="width:20%;"><div>&nbsp;</div></td></tr></tbody></table></div><div class="dojoxGridRow" role="row" aria-selected="false" style=""><table class="dojoxGridRowTable" border="0" cellspacing="0" cellpadding="0" role="presentation" style="width: 707px;"><tbody><tr><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="0" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="1" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="2" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="3" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell" idx="4" style="width:20%;"><div>&nbsp;</div></td></tr></tbody></table></div><div class="dojoxGridRow dojoxGridRowOdd" role="row" aria-selected="false" style=""><table class="dojoxGridRowTable" border="0" cellspacing="0" cellpadding="0" role="presentation" style="width: 707px;"><tbody><tr><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="0" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="1" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="2" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="3" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="4" style="width:20%;"><div>&nbsp;</div></td></tr></tbody></table></div><div class="dojoxGridRow" role="row" aria-selected="false" style=""><table class="dojoxGridRowTable" border="0" cellspacing="0" cellpadding="0" role="presentation" style="width: 707px;"><tbody><tr><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="0" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="1" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="2" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="3" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="4" style="width:20%;"><div>&nbsp;</div></td></tr></tbody></table></div><div class="dojoxGridRow dojoxGridRowOdd" role="row" aria-selected="false" style=""><table class="dojoxGridRowTable" border="0" cellspacing="0" cellpadding="0" role="presentation" style="width: 707px;"><tbody><tr><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="0" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="1" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="2" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="3" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="4" style="width:20%;"><div>&nbsp;</div></td></tr></tbody></table></div><div class="dojoxGridRow" role="row" aria-selected="false" style=""><table class="dojoxGridRowTable" border="0" cellspacing="0" cellpadding="0" role="presentation" style="width: 707px;"><tbody><tr><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="0" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="1" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="2" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="3" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="4" style="width:20%;"><div>&nbsp;</div></td></tr></tbody></table></div><div class="dojoxGridRow dojoxGridRowOdd" role="row" aria-selected="false" style=""><table class="dojoxGridRowTable" border="0" cellspacing="0" cellpadding="0" role="presentation" style="width: 707px;"><tbody><tr><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="0" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="1" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="2" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="3" style="width:20%;"><div>&nbsp;</div></td><td tabindex="-1" role="gridcell" class="dojoxGridCell " idx="4" style="width:20%;"><div>&nbsp;</div></td></tr></tbody></table></div></div></div>
+	</div>
+</div></div>
+	<div class="dojoxGridMasterMessages" style="display: none;" dojoattachpoint="messagesNode"></div>
+	<span dojoattachpoint="lastFocusNode" tabindex="0"></span>
+</div>
+			    <div dojoattachpoint="pageCountControl" class="bottom-buffer" style="text-align: center;"></div>
+			    
+			    <div style=" text-align:center; height:20px; padding: 0px; position: static; text-indent: 0px; padding: 0px;" class="dojoxGridHeader" dojoattachpoint="buttonBar">
+			    	
+			    	
+			    	<div style="text-align: center; line-height: 18px; width: 100%; height: 18px; display:block;">
+			    						
+			      		<div dojoattachpoint="pageCount" baseclass="navegacionButton"></div>						
+			      		
+											
+ 					</div>
+ 
+				</div>
+			</div>			          
+		</td>
+	</tr>
+	
+	<tr>
+		<td dojoattachpoint="_contentExport" style="display:none; width:100%">
+			<table>
+				<tbody><tr>
+					<td>
+						<span class="dijit dijitReset dijitInline exportButton" dir="" lang="" widgetid="dijit_form_Button_2" style="float: left;"><span class="dijitReset dijitInline dijitButtonNode" dojoattachevent="ondijitclick:_onButtonClick"><span class="dijitReset dijitStretch dijitButtonContents" dojoattachpoint="titleNode,focusNode" wairole="button" waistate="labelledby-dijit_form_Button_2_label" role="button" aria-labelledby="dijit_form_Button_2_label" id="dijit_form_Button_2" tabindex="0"><span class="dijitReset dijitInline dijitIcon plusIcon htmlIcon" dojoattachpoint="iconNode"></span><span class="dijitReset dijitToggleButtonIconChar">●</span><span class="dijitReset dijitInline dijitButtonText" id="dijit_form_Button_2_label" dojoattachpoint="containerNode">Exporta a HTML</span></span></span><input type="button" value="" class="dijitOffScreen" dojoattachpoint="valueNode"></span>
+					</td> 										
+					<td>
+						<span class="dijit dijitReset dijitInline exportButton" dir="" lang="" widgetid="dijit_form_Button_3" style="float: left;"><span class="dijitReset dijitInline dijitButtonNode" dojoattachevent="ondijitclick:_onButtonClick"><span class="dijitReset dijitStretch dijitButtonContents" dojoattachpoint="titleNode,focusNode" wairole="button" waistate="labelledby-dijit_form_Button_3_label" role="button" aria-labelledby="dijit_form_Button_3_label" id="dijit_form_Button_3" tabindex="0"><span class="dijitReset dijitInline dijitIcon plusIcon csvIcon" dojoattachpoint="iconNode"></span><span class="dijitReset dijitToggleButtonIconChar">●</span><span class="dijitReset dijitInline dijitButtonText" id="dijit_form_Button_3_label" dojoattachpoint="containerNode">Exportar a CSV</span></span></span><input type="button" value="" class="dijitOffScreen" dojoattachpoint="valueNode"></span>
+					</td>
+				</tr>
+			</tbody></table>
+		</td>
+	</tr> 
+</tbody></table>
+											
+										</div>
+									</div>
+								</div>                
+			                </div>
+			                <div dojotype="dijit.layout.ContentPane" title="" id="tab3" style="display: none; min-height: 150px;" dir="ltr" widgetid="tab3" role="group" class="dijitContentPane dijitTabPane dijitTabContainerTop-child dijitTabContainerTop-dijitContentPane dijitVisible">
+			                	<div class="row">
+									<div class="col-md-12">
+										<div class="row">
+											<div class="col-sm-8">					            	        	        
+												<h3>Detalle del registro</h3>
+												<hr class="red">
+											</div>
+													
+										</div>
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="detalleCedula" class="control-label">
+														Número de Cédula:
+													</label>
+													<div id="detalleCedula">1418552</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="detalleCedula" class="control-label">
+														Nombre:	
+													</label>
+													<div id="detalleNombre">ANDRÉS MANUEL LÓPEZ OBRADOR</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="detalleCedula" class="control-label">
+														Género:	
+													</label>
+													<div id="detalleGenero">HOMBRE</div>
+												</div>
+											</div>
+										</div>
+										
+										
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="detalleCedula" class="control-label">
+														Profesión:	
+													</label>
+													<div id="detalleProfesion">LICENCIATURA EN CIENCIAS POLÍTICAS Y ADMINISTRACIÓN PÚBLICA</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="detalleCedula" class="control-label">
+														Año de expedición:		
+													</label>
+													<div id="detalleFecha">1989</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="detalleCedula" class="control-label">
+														Institución:		
+													</label>
+													<div id="detalleInstitucion">UNIVERSIDAD NACIONAL AUTÓNOMA DE MÉXICO</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="detalleCedula" class="control-label">
+														Tipo:			
+													</label>
+													<div id="detalleTipo">C1</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<a href="javascript:goCorrecionCedula();">Solicitud de corrección de datos<span class="glyphicon glyphicon glyphicon-link" aria-hidden="true"></span></a>
+												</div>
+											</div>
+										</div>
+										<!-- <div class="row">
+											<div class="col-md-8">
+												<p style="text-align: justify;">Los datos que se reflejan son preliminares, en caso de  requerir un <strong>documento oficial, </strong>ser&aacute; necesario <strong>realizar el tr&aacute;mite de </strong><a href="http://www.sep.gob.mx/wb/sep1/sep1_Informe_de_Antecedentes_Profesionales_">&quot;Antecedentes  Profesionales&quot;<span class="glyphicon glyphicon glyphicon-link" aria-hidden="true"></a> ante  la <strong>Direcci&oacute;n General de Profesiones<em>.</em></strong>&nbsp; </p>										
+											</div>
+										</div>  -->
+										<div class="row">
+											<div class="col-md-8">
+												<h3>* Glosario de Nomenclaturas</h3>
+												<hr class="red">    
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<b>AE</b>: Autorización de Especialidad
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<b>AEIE</b>: Autorización de Especialidad por Institución Educativa
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<b>AECEM</b>: Autorización de Especialidad por Consejo de Especialidades Médicas
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<b>AESSA</b>: Autorización de Especialidad por Sector Salud
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>							       
+			                </div>		
+			            </div>
+</div>
+					</form>
+				</div>
+			</div>
+			
+			
+	       
+		</main>
+	
+	    
+	
+
+
+<div class="dijitTooltip dijitTooltipLeft" id="dijit__MasterTooltip_0" widgetid="dijit__MasterTooltip_0">
+	<div class="dijitTooltipContainer dijitTooltipContents" dojoattachpoint="containerNode" wairole="alert" role="alert"></div>
+	<div class="dijitTooltipConnector"></div>
+</div><div class="dijitDialogFixed dijitDialog" tabindex="-1" wairole="dialog" waistate="labelledby-dialogBlock_title" role="dialog" aria-labelledby="dialogBlock_title" id="dialogBlock" widgetid="dialogBlock" title="" style="position: absolute; left: 384px; top: 893px; opacity: 0; z-index: 951; display: none;">
+	<div dojoattachpoint="titleBar" class="dijitDialogTitleBar" title="<span class='dialogTitle'>Mensaje</span>">
+	<span dojoattachpoint="titleNode" class="dijitDialogTitle" id="dialogBlock_title"><span class="dialogTitle">Mensaje</span></span>
+	<span dojoattachpoint="closeButtonNode" class="dijitDialogCloseIcon" dojoattachevent="onclick: onCancel" title="Cancelar" style="display: none;">
+		<span dojoattachpoint="closeText" class="closeText" title="Cancelar">x</span>
+	</span>
+	</div>
+		<div dojoattachpoint="containerNode" class="dijitDialogPaneContent" style="width: auto; height: auto;"><span class="messageDialog"><div style="text-align: center;">Espere por favor...<br><img src="/cedula/img/loading2.gif" alt="..."></div></span></div>
+</div><div class="dijitDialogUnderlayWrapper" id="dijit_DialogUnderlay_0" widgetid="dijit_DialogUnderlay_0" style="display: none; top: 525px; left: 0px; z-index: 950;"><div class="dijitDialogUnderlay _underlay" dojoattachpoint="node" id="dialogBlock_underlay" style="width: 912px; height: 865px;"></div></div><footer class="main-footer"><div class="list-info"><div class="container"><div class="row"><div class="col-sm-3"><img data-v-9e928f9a="" src="https://framework-gb.cdn.gob.mx/gobmx/img/logo_blanco.svg" href="/" alt="logo gobierno de mÃƒÂ©xico" class="logo_footer" style="max-width: 90%;"></div><div class="col-sm-3"><h5>Enlaces</h5><ul><li><a href="https://participa.gob.mx" target="_blank" rel="noopener" title="Enlace abre en ventana nueva">Participa</a></li><li><a href="http://www.ordenjuridico.gob.mx" target="_blank" rel="noopener" title="Enlace abre en ventana nueva">Marco Jurídico</a></li><li><a href="https://consultapublicamx.inai.org.mx/vut-web/" target="_blank" rel="noopener" title="Enlace abre en ventana nueva">Plataforma Nacional de Transparencia</a></li><li><a href="https://alertadores.funcionpublica.gob.mx/" target="_blank" rel="noopener" title="Enlace abre en ventana nueva">Alerta</a></li><li><a href="https://sidec.funcionpublica.gob.mx" target="_blank" rel="noopener" title="Enlace abre en ventana nueva">Denuncia</a></li></ul></div><div class="col-sm-3"><h5>¿Qué es gob.mx?</h5><p>Es el portal único de trámites, información y participación ciudadana. <a href="https://www.gob.mx/que-es-gobmx">Leer más</a></p><ul><li><a href="https://datos.gob.mx">Portal de datos abiertos</a></li><li><a href="https://www.gob.mx/accesibilidad">Declaración de accesibilidad</a></li><li><a href="https://www.gob.mx/terminos">Términos y Condiciones</a></li><li><a href="https://www.gob.mx/terminos#medidas-seguridad-informacion">Política de seguridad</a></li><li><a href="https://www.gob.mx/sitemap">Mapa de sitio</a></li></ul></div><div class="col-sm-3"><h5><a href="https://www.gob.mx/tramites/ficha/presentacion-de-quejas-y-denuncias-en-la-sfp/SFP54">Denuncia contra servidores públicos</a></h5><h5>Síguenos en</h5><ul data-v-6b1f797a="" class="list-inline"><li><a data-v-6b1f797a="" id="Facebook" href="https://www.facebook.com/gobmexico" target="_blank" rel="noopener" title="enlace a facebook abre en una nueva ventana" class="sendEst share-info footer"><img alt="Facebook" src="https://framework-gb.cdn.gob.mx/landing/img/facebook.png"></a></li><li style="margin-left: 5px; margin-right: 5px;"><a data-v-6b1f797a="" id="Twitter" href="https://twitter.com/GobiernoMX" target="_blank" rel="noopener" title="Enlace a twitter abre en una nueva ventana" class="sendEst share-info footer"><img alt="Twitter" src="https://framework-gb.cdn.gob.mx/landing/img/twitter.png"></a></li><li style="margin-left: 5px; margin-right: 5px;"><a data-v-6b1f797a="" id="Instagram" href="https://www.instagram.com/gobmexico/" target="_blank" rel="noopener" title="Enlace a instagram abre en una nueva ventana" class="sendEst share-info footer"><img alt="Instagram" src="https://framework-gb.cdn.gob.mx/landing/img/instagram.png "></a></li><li style="margin-left: 5px; margin-right: 5px;"><a data-v-6b1f797a="" id="Youtube" href="https://www.youtube.com/@gobiernodemexico" target="_blank" rel="noopener" title="Enlace a youtube abre en una nueva ventana" class="sendEst share-info footer"><img alt="Youtube" src="https://framework-gb.cdn.gob.mx/landing/img/youtube.png"></a></li></ul></div></div></div></div><div class="container-fluid footer-pleca"><div class="row"><div class="col"><br><br></div></div></div></footer><iframe src="javascript:'<html><head><script>if(&quot;loadFirebugConsole&quot; in window){window.loadFirebugConsole();}</script></head><body></body></html>'" style="position: absolute; width: 5em; height: 10em; top: -10000px;"></iframe></body></html>
