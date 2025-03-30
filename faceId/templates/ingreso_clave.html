@@ -6,54 +6,53 @@
     <title>Verificación VotaSeguro</title> <!-- Título más específico -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet"> <!-- Añadir fuente Montserrat -->
     <style>
-        /* --- Tus estilos CSS (igual que antes) --- */
         body {
             background: linear-gradient(to bottom, #611232, #8b1d47, #611232);
             padding: 0;
             margin: 0;
-            font-family: 'Montserrat', sans-serif; /* Aplicar fuente */
-            min-height: 100vh; /* Asegurar que el gradiente cubra todo */
-            display: flex; /* Para centrar mejor */
-            flex-direction: column; /* Para ordenar elementos */
+            font-family: 'Montserrat', sans-serif; 
+            min-height: 100vh; 
+            display: flex;
+            flex-direction: column; 
         }
 
         .barra-superior {
             background-color: white;
-            height: auto; /* Ajustar altura automáticamente */
+            height: auto; 
             width: 100%;
-            padding: 10px 0; /* Añadir algo de padding vertical */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+            padding: 10px 0; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
         }
 
         .img-decoration {
-            height: 40px; /* Usar pixeles fijos para el logo es más predecible */
-            display: block; /* Evitar espacio extra debajo */
-            margin-left: 20px; /* Mantener margen */
+            height: 40px; 
+            display: block; 
+            margin-left: 20px; 
         }
 
-        .app-container { /* Contenedor principal */
+        .app-container { 
              width: 100%;
-             flex-grow: 1; /* Ocupa espacio restante */
+             flex-grow: 1; 
              display: flex;
              flex-direction: column;
-             align-items: center; /* Centrar contenido horizontalmente */
+             align-items: center; 
         }
 
         h1 {
-            font-size: 2.5rem; /* Ajustar tamaño para responsividad */
+            font-size: 2.5rem; 
             color: #ffffff;
             text-align: center;
-            margin-top: 40px; /* Espacio arriba */
+            margin-top: 40px; 
             margin-bottom: 30px;
         }
 
-        .contenedor { /* Contenedor del bloque blanco */
+        .contenedor {
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 100%; /* Ocupar ancho */
-            padding: 20px; /* Añadir padding para móviles */
-            box-sizing: border-box; /* Incluir padding en el ancho */
+            width: 100%; 
+            padding: 20px; 
+            box-sizing: border-box; 
         }
 
         .bloque-centrado {
@@ -62,45 +61,42 @@
             align-items: center;
             justify-content: center;
             background-color: #ffffff;
-            width: 100%; /* Hacerlo responsivo */
-            max-width: 500px; /* Limitar ancho máximo */
+            width: 100%; 
+            max-width: 500px; 
             min-height: 20vh;
             border-radius: 20px;
-            padding: 30px; /* Más padding interno */
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+            padding: 30px; 
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); 
             box-sizing: border-box;
         }
 
         h2 {
             font-size: 1.2rem;
-            color: #555; /* Ligeramente más oscuro */
+            color: #555; 
             text-align: center;
-            margin-top: 0; /* Quitar margen superior si está dentro del bloque */
-            margin-bottom: 25px; /* Más espacio debajo */
+            margin-top: 0; 
+            margin-bottom: 25px; 
         }
 
-        /* Estilos para el formulario principal */
         .formulario-principal {
              width: 100%;
              display: flex;
              flex-direction: column;
              align-items: center;
-             gap: 15px; /* Espacio entre elementos del form */
+             gap: 15px; 
         }
 
 
-        /* Quitar .campo, usar directamente en el input */
         .campo-texto {
             width: 100%;
-            max-width: 300px; /* Ajustar ancho del input */
-            /* height: auto; Eliminar altura fija */
-            padding: 12px; /* Más padding */
+            max-width: 300px; 
+            padding: 12px; 
             border: 1px solid #ccc;
-            border-radius: 8px; /* Bordes más redondeados */
+            border-radius: 8px; 
             font-size: 1rem;
-            text-align: center; /* Centrar texto dentro */
+            text-align: center; 
             box-sizing: border-box;
-            text-transform: uppercase; /* Convertir a mayúsculas mientras escribe */
+            text-transform: uppercase; 
         }
 
         .Verificar {
@@ -110,39 +106,38 @@
             font-weight: bold;
             padding: 12px 24px;
             border: none;
-            border-radius: 8px; /* Coincidir con input */
+            border-radius: 8px; 
             cursor: pointer;
             transition: all 0.3s ease-in-out;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-top: 10px; /* Espacio sobre el botón */
+            margin-top: 10px; 
         }
 
         .Verificar:hover {
-            background-color: #8b1d47; /* Color más claro al pasar el mouse */
+            background-color: #8b1d47; 
             box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
             transform: translateY(-2px);
         }
 
         .Verificar:active {
-            background-color: #4e0f28; /* Más oscuro al hacer clic */
-            transform: translateY(0px); /* Quitar efecto al presionar */
+            background-color: #4e0f28; 
+            transform: translateY(0px); 
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .Nota-texto {
-            margin-top: 25px; /* Más espacio */
-            font-size: 0.85rem; /* Ligeramente más pequeño */
+            margin-top: 25px; 
+            font-size: 0.85rem; 
             color: #666;
             text-align: center;
-            max-width: 400px; /* Limitar ancho de la nota */
+            max-width: 400px; 
         }
 
-        /* --- Estilos para mensajes Flash (igual que antes) --- */
-         .alert { padding: 15px; margin-bottom: 20px; border: 1px solid transparent; border-radius: 4px; text-align: center; max-width: 500px; margin-left: auto; margin-right: auto;}
+        .alert { padding: 15px; margin-bottom: 20px; border: 1px solid transparent; border-radius: 4px; text-align: center; max-width: 500px; margin-left: auto; margin-right: auto;}
         .alert-info { color: #31708f; background-color: #d9edf7; border-color: #bce8f1; }
         .alert-warning { color: #8a6d3b; background-color: #fcf8e3; border-color: #faebcc; }
         .alert-error { color: #a94442; background-color: #f2dede; border-color: #ebccd1; }
-        .alert-success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; } /* Añadido estilo success */
+        .alert-success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; } 
 
 
     </style>
@@ -150,28 +145,22 @@
 <body>
     <div class="app-container">
         <div class="barra-superior">
-            <!-- Asegúrate que la ruta a static sea correcta desde donde sirves Flask -->
             <img class="img-decoration" src="{{ url_for('static', filename='img/Logo.png') }}" alt="Logo VotaSeguro" />
         </div>
 
         <h1>Verificación de Votante</h1>
 
-        <!-- Mostrar mensajes flash de Flask -->
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
             {% for category, message in messages %}
-              <!-- Usar categoría directamente si coincide con nombres de clase (info, warning, error, success) -->
               <div class="alert alert-{{ category }}">{{ message }}</div>
             {% endfor %}
           {% endif %}
         {% endwith %}
 
-        <!-- Contenedor del bloque blanco -->
         <div class="contenedor">
             <div class="bloque-centrado">
                 <h2>Ingresa tu clave de lector (18 caracteres)</h2>
-
-                <!-- !!! FORMULARIO PRINCIPAL CORREGIDO !!! -->
                 <form class="formulario-principal" action="{{ url_for('verificar_clave') }}" method="POST">
                     <input
                         class="campo-texto"
@@ -185,17 +174,13 @@
                         pattern="[A-Z0-9]{18}" 
                         title="Ingrese 18 letras mayúsculas o números" 
                         autocomplete="off"/>
-                    <!-- Botón submit DENTRO del formulario principal -->
                     <input class="Verificar" type="submit" value="Verificar e Iniciar Cámara" />
                 </form>
-                <!-- FIN FORMULARIO CORREGIDO -->
-
                 <div class="Nota-texto">
                    <p><small>Nota: Al verificar, se abrirá una ventana separada para la cámara. Mire esa ventana y presione 'Q' en ella para cancelar.</small></p>
                 </div>
             </div>
-        </div> <!-- Fin .contenedor -->
-
-    </div> <!-- Fin .app-container -->
+        </div> 
+    </div> 
 </body>
 </html>

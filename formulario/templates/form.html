@@ -327,14 +327,12 @@
     </div>
 
     <script>
-        // --- Lógica para selección visual y abrir/cerrar modales ---
         document.addEventListener("DOMContentLoaded", function () {
             const botones = document.querySelectorAll(".seleccionado");
             const modals = document.querySelectorAll(".modal");
             const closes = document.querySelectorAll(".close");
             const cancels = document.querySelectorAll(".cancelar");
 
-            // Ocultar todas las 'X' por defecto
             botones.forEach(boton => {
                 const imagen = boton.querySelector("img");
                 if(imagen) imagen.style.display = "none";
@@ -342,24 +340,20 @@
 
             botones.forEach(boton => {
                 boton.addEventListener("click", function () {
-                    // Siempre desmarcar todos primero
                     botones.forEach(b => {
                         b.classList.remove("activo");
                         const img = b.querySelector("img");
                         if(img) img.style.display = "none";
                     });
-                    // Marcar el botón clickeado
                     this.classList.add("activo");
                     const img = this.querySelector("img");
                     if(img) img.style.display = "block";
-                    // Abrir el modal correspondiente
                     const modalId = "modal" + boton.id.replace("btn", "");
                     const modal = document.getElementById(modalId);
                     if(modal) modal.style.display = "block";
                 });
             });
 
-            // Cerrar modal con 'x' o 'cancelar'
             [...closes, ...cancels].forEach(button => {
                 button.addEventListener("click", function () {
                     const modalId = this.getAttribute("data-modal");
@@ -376,7 +370,6 @@
                 });
             });
 
-            // Cerrar modal si se hace clic fuera de él
             window.onclick = function(event) {
                 modals.forEach(modal => {
                     if (event.target == modal) {
@@ -393,9 +386,7 @@
             }
         });
 
-        // --- ELIMINADA la función getCurrentLocation ---
-
-        // --- Mapeo Partido -> Candidato ---
+ 
         const candidatosPorPartido = {
             "PARTIDO ACCION NACIONAL": "Ricardo Anaya Cortés",
             "PARTIDO REVOLUCIONARIO INSTITUCIONAL": "José Antonio Meade Kuribreña",
@@ -406,7 +397,6 @@
             "MORENA": "Claudia Sheinbaum Pardo",
         };
 
-        // --- Función enviarVoto SIN UBICACIÓN ---
         async function enviarVoto(partidoSeleccionado) {
             console.log("Iniciando envío para: " + partidoSeleccionado);
             const feedbackDiv = document.getElementById('feedbackArea');
@@ -429,13 +419,10 @@
             }
             const tokenValue = tokenInput.value;
 
-            // --- YA NO SE OBTIENE UBICACIÓN ---
-
-            // Preparar Datos del Voto
+         
             const tipoEleccion = "PRESIDENCIA";
             const candidatoSeleccionado = candidatosPorPartido[partidoSeleccionado] || "Candidato No Registrado";
 
-            // URLs y Payloads (confirmationPayload ya no lleva 'location')
             const externalApiUrl = 'http://127.0.0.1:8000/api/submit-form';
             const confirmationApiUrl = 'http://127.0.0.1:8000/api/confirm-vote';
 
@@ -444,47 +431,38 @@
                 tipo_eleccion: tipoEleccion,
                 partido_votado: partidoSeleccionado,
                 candidato_votado: candidatoSeleccionado
-                // No incluimos location aquí (a menos que el externo lo requiera por IP)
             };
 
             const confirmationPayload = {
                 token: tokenValue
-                // Ya no se envía 'location'
             };
 
-            // Envíos Secuenciales
             try {
-                // 1. Enviar al (Simulado) Externo
                 feedbackDiv.textContent = "Enviando voto al sistema...";
                 console.log("Enviando a API externa (simulada):", externalApiUrl, externalPayload);
                 const externalResponse = await fetch(externalApiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(externalPayload) });
                 const externalResult = await externalResponse.json();
                 if (!externalResponse.ok) throw new Error(externalResult.error || `Error ${externalResponse.status} externo.`);
-                console.log("Respuesta externa (simulada):", externalResult.message);
+                console.log("Respuesta externa (prueba):", externalResult.message);
 
-                // 2. Enviar Confirmación Interna
                 feedbackDiv.textContent = "Confirmando registro...";
                 console.log("Enviando a API de confirmación interna:", confirmationApiUrl, confirmationPayload);
                 const confirmationResponse = await fetch(confirmationApiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(confirmationPayload) });
                 const confirmationResult = await confirmationResponse.json();
                 if (!confirmationResponse.ok) throw new Error(confirmationResult.error || `Error ${confirmationResponse.status} interno.`);
 
-                // Éxito Final
                 console.log("Respuesta confirmación interna:", confirmationResult.message);
                 feedbackDiv.textContent = `¡Voto Exitoso! ${confirmationResult.message || 'Registro completado.'}`;
                 feedbackDiv.className = 'feedback-message feedback-success';
 
             } catch (error) {
-                // Manejo de Errores
                 console.error("Error durante el envío del voto:", error);
                 feedbackDiv.textContent = `Error al procesar el voto: ${error.message}`;
                 feedbackDiv.className = 'feedback-message feedback-error';
             } finally {
-                 // Cerrar el modal activo
                  const activeModal = document.querySelector('.modal[style*="block"]');
                  if (activeModal) {
                      activeModal.style.display = 'none';
-                     // Desmarcar botón asociado
                      const botonId = activeModal.id.replace("modal", "btn");
                      const botonAsociado = document.getElementById(botonId);
                      if(botonAsociado) {
@@ -493,8 +471,6 @@
                          if(img) img.style.display = "none";
                      }
                  }
-                 // Limpieza opcional del feedbackDiv
-                 // setTimeout(() => { /* ... */ }, 5000);
             }
         }
     </script>

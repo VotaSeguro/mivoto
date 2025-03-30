@@ -9,8 +9,6 @@ def mostrar_formulario():
 
     if not token_recibido:
         abort(400, description="Falta el token de acceso en la URL.")
-        # O podrías renderizar una plantilla de error diferente:
-        # return render_template('error_token.html'), 400
 
    
     return render_template('form.html', token=token_recibido)
